@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import './index.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Hero from './components/Hero';
@@ -73,7 +74,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0B0B0F] selection:bg-[--purple] selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#0B0B0F]">
       <Header currentPage={currentPage} onNavigate={setCurrentPage} />
       
       <main className="flex-grow">

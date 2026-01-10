@@ -4,7 +4,7 @@ import { CORE_VALUES } from '../constants';
 
 const About: React.FC = () => {
   return (
-    <section className="pt-40 pb-32 px-6 md:px-12">
+    <section className="pt-40 pb-32 px-6 md:px-12" aria-label="About Us Section">
       <div className="max-w-7xl mx-auto">
         {/* Story Section */}
         <div className="grid lg:grid-cols-2 gap-24 items-center mb-48">
@@ -34,15 +34,15 @@ const About: React.FC = () => {
           
           <div className="relative">
             <div className="w-full aspect-square rounded-[4rem] overflow-hidden border border-white/5 bg-[#14141C]">
-              <img src="https://picsum.photos/seed/vidavest-impact-1/800/800" alt="Vidavest Impact" className="w-full h-full object-cover grayscale opacity-60" />
+              <img src="https://picsum.photos/seed/vidavest-impact-1/800/800" alt="Vidavest social impact and wealth creation initiative in Nigeria" className="w-full h-full object-cover grayscale opacity-60" />
             </div>
-            <div className="absolute -top-12 -right-12 w-48 h-48 brand-gradient-bg rounded-full blur-[80px] opacity-20"></div>
+            <div className="absolute -top-12 -right-12 w-48 h-48 brand-gradient-bg rounded-full blur-[80px] opacity-20" aria-hidden="true"></div>
           </div>
         </div>
 
         {/* Enhanced Founder Profile Section */}
         <div className="mb-48 bg-[#0D0D12] rounded-[4rem] p-10 md:p-24 border border-white/5 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none">
+          <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none" aria-hidden="true">
             <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600 rounded-full blur-[150px]"></div>
           </div>
 
@@ -51,7 +51,7 @@ const About: React.FC = () => {
               <div className="relative group">
                 <div className="absolute -inset-4 brand-gradient-bg rounded-[3.5rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
                 <div className="relative w-full aspect-[4/5] rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl">
-                  <img src="https://picsum.photos/seed/charity-kwala/800/1000" alt="Charity Aminu Kwala" className="w-full h-full object-cover grayscale brightness-110" />
+                  <img src="https://picsum.photos/seed/charity-kwala/800/1000" alt="Charity Aminu Kwala - Founder of Vidavest, a financial empowerment leader in Abuja" className="w-full h-full object-cover grayscale brightness-110" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                 </div>
               </div>
@@ -76,7 +76,7 @@ const About: React.FC = () => {
               <h2 className="text-5xl md:text-6xl font-black mb-8 leading-tight">Charity <br/><span className="brand-gradient-text">Aminu Kwala.</span></h2>
               
               <div className="space-y-6 text-gray-400 text-lg leading-relaxed mb-12">
-                <p className="font-semibold text-white">"True empowerment isn't just about handing out checks; it's about building the character and the community required to manage wealth."</p>
+                <p className="font-semibold text-white italic">"True empowerment isn't just about handing out checks; it's about building the character and the community required to manage wealth."</p>
                 <p>
                   Charity is a visionary leader with a deep-seated passion for human capital development. Her journey began with a simple observation of the untapped potential in Nigerian youth, particularly those transitioning from service (NYSC) or starting vocational paths.
                 </p>
@@ -87,13 +87,13 @@ const About: React.FC = () => {
 
               <div className="flex flex-wrap items-center gap-8">
                 <div className="flex items-center gap-4">
-                  <a href="#" className="w-12 h-12 rounded-full bg-[#1A1A24] border border-[#2A2A38] flex items-center justify-center hover:brand-gradient-bg hover:text-black transition duration-300">
+                  <a href="#" className="w-12 h-12 rounded-full bg-[#1A1A24] border border-[#2A2A38] flex items-center justify-center hover:brand-gradient-bg hover:text-black transition duration-300" aria-label="Founder LinkedIn Profile">
                     <span className="font-bold">in</span>
                   </a>
-                  <a href="#" className="w-12 h-12 rounded-full bg-[#1A1A24] border border-[#2A2A38] flex items-center justify-center hover:brand-gradient-bg hover:text-black transition duration-300">
+                  <a href="#" className="w-12 h-12 rounded-full bg-[#1A1A24] border border-[#2A2A38] flex items-center justify-center hover:brand-gradient-bg hover:text-black transition duration-300" aria-label="Founder Twitter Profile">
                     <span className="font-bold">tw</span>
                   </a>
-                  <a href="#" className="w-12 h-12 rounded-full bg-[#1A1A24] border border-[#2A2A38] flex items-center justify-center hover:brand-gradient-bg hover:text-black transition duration-300">
+                  <a href="#" className="w-12 h-12 rounded-full bg-[#1A1A24] border border-[#2A2A38] flex items-center justify-center hover:brand-gradient-bg hover:text-black transition duration-300" aria-label="Founder Instagram Profile">
                     <span className="font-bold">ig</span>
                   </a>
                 </div>
@@ -111,11 +111,11 @@ const About: React.FC = () => {
           <h3 className="text-3xl font-black mb-16 text-center">Guided by <span className="brand-gradient-text">Unyielding Principles.</span></h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {CORE_VALUES.map(value => (
-              <div key={value.title} className="p-8 rounded-3xl bg-[#14141C] border border-[#2A2A38] hover:border-purple-500/50 hover:-translate-y-2 transition-all duration-300 group">
-                <div className="text-4xl mb-6 group-hover:scale-110 transition duration-300">{value.icon}</div>
+              <article key={value.title} className="p-8 rounded-3xl bg-[#14141C] border border-[#2A2A38] hover:border-purple-500/50 hover:-translate-y-2 transition-all duration-300 group">
+                <div className="text-4xl mb-6 group-hover:scale-110 transition duration-300" aria-hidden="true">{value.icon}</div>
                 <h4 className="text-xl font-bold mb-4">{value.title}</h4>
                 <p className="text-sm text-gray-500 leading-relaxed font-medium">{value.description}</p>
-              </div>
+              </article>
             ))}
           </div>
         </div>

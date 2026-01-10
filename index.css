@@ -1,0 +1,57 @@
+
+:root {
+  --gold: #F3C77A;
+  --purple: #8E44AD;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #0B0B0F;
+  color: #F5F5F5;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  margin: 0;
+}
+
+.brand-gradient-text {
+  background: linear-gradient(135deg, #8E44AD, #F3C77A);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.brand-gradient-bg {
+  background: linear-gradient(135deg, #8E44AD, #F3C77A);
+}
+
+.glass-nav {
+  background: rgba(11, 11, 15, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(42, 42, 56, 0.5);
+}
+
+::selection {
+  background-color: var(--purple);
+  color: white;
+}
+
+/* Custom animations and smooth shadows */
+.shadow-purple-glow {
+  box-shadow: 0 10px 30px -10px rgba(142, 68, 173, 0.3);
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Utility classes not provided by standard tailwind base */
+.brand-border {
+  border: 1px solid rgba(42, 42, 56, 1);
+}
