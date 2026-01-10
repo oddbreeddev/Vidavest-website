@@ -1,4 +1,8 @@
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --gold: #F3C77A;
   --purple: #8E44AD;
