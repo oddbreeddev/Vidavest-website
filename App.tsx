@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import './index.css';
 import Header from './components/Header';
@@ -8,6 +9,9 @@ import Programs from './components/Programs';
 import Donate from './components/Donate';
 import Contact from './components/Contact';
 import HowItWorks from './components/HowItWorks';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsOfService from './components/TermsOfService';
+import CookiePolicy from './components/CookiePolicy';
 import { Page } from './types';
 
 const App: React.FC = () => {
@@ -73,6 +77,12 @@ const App: React.FC = () => {
         return <Donate />;
       case Page.Contact:
         return <Contact />;
+      case Page.Privacy:
+        return <PrivacyPolicy />;
+      case Page.Terms:
+        return <TermsOfService />;
+      case Page.Cookies:
+        return <CookiePolicy />;
       default:
         return <Hero onNavigate={setCurrentPage} />;
     }
@@ -87,7 +97,7 @@ const App: React.FC = () => {
       </main>
 
       {/* CTA Overlay for Home only */}
-      {currentPage === Page.Home && (
+      {[Page.Home].includes(currentPage) && (
         <section className="py-40 px-6">
            <div className="max-w-[1400px] mx-auto brand-gradient-bg rounded-[4rem] p-16 md:p-32 text-center text-black relative overflow-hidden group shadow-[0_50px_100px_-20px_rgba(142,68,173,0.4)]">
               <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-white/10 rounded-full -mr-48 -mt-48 blur-3xl transition duration-1000 group-hover:scale-110"></div>

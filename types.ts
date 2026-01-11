@@ -13,5 +13,8 @@ export enum Page {
   About = 'about',
   Programs = 'programs',
   Donate = 'donate',
-  Contact = 'contact'
+  Contact = 'contact',
+  Privacy = 'privacy',
+  Terms = 'terms',
+  Cookies = 'cookies'
 }
