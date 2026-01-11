@@ -43,7 +43,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <address className="not-italic text-gray-400 space-y-4">
               <p>Abuja, Nigeria</p>
               <p>+234 803 628 9811</p>
-              <p className="text-white font-bold">charityaminukwala@gmail.com</p>
+              <p className="text-white font-bold">vidavest05@gmail.com</p>
             </address>
           </div>
         </div>

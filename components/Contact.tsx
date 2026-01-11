@@ -23,7 +23,7 @@ const Contact: React.FC = () => {
                 <div className="w-16 h-16 rounded-[1.5rem] bg-[#14141C] border border-[#2A2A38] flex items-center justify-center text-3xl group-hover:border-purple-500/50 transition">📧</div>
                 <div>
                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Email Us</p>
-                   <p className="text-xl font-bold">charityaminukwala@gmail.com</p>
+                   <p className="text-xl font-bold">vidavest05@gmail.com</p>
                 </div>
               </div>
               <div className="flex items-center gap-8 group">
