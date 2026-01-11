@@ -40,7 +40,7 @@ const About: React.FC = () => {
           </div>
         </div>
 
-        {/* Corporate Philosophy Section (formerly Founder Profile) */}
+        {/* Corporate Philosophy Section */}
         <div className="mb-48 bg-[#0D0D12] rounded-[4rem] p-10 md:p-24 border border-white/5 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none" aria-hidden="true">
             <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600 rounded-full blur-[150px]"></div>
@@ -51,7 +51,7 @@ const About: React.FC = () => {
               <div className="relative group">
                 <div className="absolute -inset-4 brand-gradient-bg rounded-[3.5rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
                 <div className="relative w-full aspect-[4/5] rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl">
-                  <img src="https://picsum.photos/seed/vidavest-leadership/800/1000" alt="Vidavest Leadership - Financial empowerment leaders in Abuja" className="w-full h-full object-cover grayscale brightness-110" />
+                  <img src="https://picsum.photos/seed/vidavest-leadership/800/1000" alt="Vidavest Leadership Team" className="w-full h-full object-cover grayscale brightness-110" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                 </div>
               </div>
@@ -60,46 +60,43 @@ const About: React.FC = () => {
               <div className="absolute -bottom-8 -right-8 flex flex-col gap-4">
                 <div className="bg-[#1A1A24] border border-[#2A2A38] p-5 rounded-2xl shadow-2xl backdrop-blur-md">
                    <p className="text-[--gold] text-xl font-black">100%</p>
-                   <p className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Ethics Driven</p>
+                   <p className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Ethical Investment</p>
                 </div>
                 <div className="bg-white text-black p-5 rounded-2xl shadow-2xl">
-                   <p className="text-xl font-black">500+</p>
-                   <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Active Ventures</p>
+                   <p className="text-xl font-black">200+</p>
+                   <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Sustainable Jobs</p>
                 </div>
               </div>
             </div>
 
             <div className="lg:col-span-7">
               <span className="inline-block py-2 px-4 rounded-lg bg-purple-500/10 border border-purple-500/20 text-[--gold] text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-                The Vidavest Philosophy
+                Our Corporate DNA
               </span>
-              <h2 className="text-5xl md:text-6xl font-black mb-8 leading-tight">Our <br/><span className="brand-gradient-text">Leadership & Vision.</span></h2>
+              <h2 className="text-5xl md:text-6xl font-black mb-8 leading-tight">Leadership <br/><span className="brand-gradient-text">& Visionary Growth.</span></h2>
               
               <div className="space-y-6 text-gray-400 text-lg leading-relaxed mb-12">
-                <p className="font-semibold text-white italic">"True empowerment isn't just about resource allocation; it's about building the character and the community required to sustain wealth."</p>
+                <p className="font-semibold text-white italic">"We believe true empowerment isn't just about resource allocation; it's about building the character and the community required to sustain generational wealth."</p>
                 <p>
-                  At Vidavest, our leadership team is comprised of visionary strategists with a deep-seated passion for human capital development. Our journey began with a collective observation of the untapped potential in Nigerian youth, particularly those starting vocational paths or transitioning from service.
+                  At Vidavest, our management team is comprised of seasoned strategists with a deep-seated passion for human capital development. Our journey began with a collective observation of the untapped potential in Nigerian youth, particularly those starting vocational paths or transitioning from national service.
                 </p>
                 <p>
-                  With a background rooted in financial strategy and social impact, we established this platform to serve as a beacon of integrity and excellence in the Nigerian investment landscape.
+                  We established this platform to serve as a beacon of integrity and excellence in the Nigerian investment landscape, ensuring every seed sown leads to a measurable harvest of impact.
                 </p>
               </div>
 
               <div className="flex flex-wrap items-center gap-8">
                 <div className="flex items-center gap-4">
-                  <a href="#" className="w-12 h-12 rounded-full bg-[#1A1A24] border border-[#2A2A38] flex items-center justify-center hover:brand-gradient-bg hover:text-black transition duration-300" aria-label="LinkedIn Profile">
+                  <a href="#" className="w-12 h-12 rounded-full bg-[#1A1A24] border border-[#2A2A38] flex items-center justify-center hover:brand-gradient-bg hover:text-black transition duration-300" aria-label="Official LinkedIn">
                     <span className="font-bold">in</span>
                   </a>
-                  <a href="#" className="w-12 h-12 rounded-full bg-[#1A1A24] border border-[#2A2A38] flex items-center justify-center hover:brand-gradient-bg hover:text-black transition duration-300" aria-label="Twitter Profile">
+                  <a href="#" className="w-12 h-12 rounded-full bg-[#1A1A24] border border-[#2A2A38] flex items-center justify-center hover:brand-gradient-bg hover:text-black transition duration-300" aria-label="Official Twitter">
                     <span className="font-bold">tw</span>
-                  </a>
-                  <a href="#" className="w-12 h-12 rounded-full bg-[#1A1A24] border border-[#2A2A38] flex items-center justify-center hover:brand-gradient-bg hover:text-black transition duration-300" aria-label="Instagram Profile">
-                    <span className="font-bold">ig</span>
                   </a>
                 </div>
                 <div className="h-10 w-px bg-[#2A2A38] hidden sm:block"></div>
-                <button className="text-sm font-black text-white hover:text-[--gold] transition border-b border-gray-800 hover:border-[--gold] pb-1 uppercase tracking-widest">
-                  Our Annual Impact Report
+                <button className="text-[10px] font-black text-white hover:text-[--gold] transition border-b border-gray-800 hover:border-[--gold] pb-1 uppercase tracking-[0.3em]">
+                  Download Annual Impact Review
                 </button>
               </div>
             </div>
@@ -108,7 +105,7 @@ const About: React.FC = () => {
 
         {/* Values Section */}
         <div>
-          <h3 className="text-3xl font-black mb-16 text-center">Guided by <span className="brand-gradient-text">Unyielding Principles.</span></h3>
+          <h3 className="text-3xl font-black mb-16 text-center uppercase tracking-widest">Our <span className="brand-gradient-text">Core Principles.</span></h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {CORE_VALUES.map(value => (
               <article key={value.title} className="p-8 rounded-3xl bg-[#14141C] border border-[#2A2A38] hover:border-purple-500/50 hover:-translate-y-2 transition-all duration-300 group">
