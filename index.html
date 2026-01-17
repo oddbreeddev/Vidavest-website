@@ -3,37 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vidavest | Financial Empowerment for Nigeria</title>
     
-    <!-- Primary Meta Tags -->
-    <title>Vidavest | Financial Empowerment for Nigerian Youth & Entrepreneurs</title>
-    <meta name="title" content="Vidavest | Financial Empowerment for Nigerian Youth & Entrepreneurs">
-    <meta name="description" content="Vidavest helps Nigerian youth and entrepreneurs build sustainable wealth through seed funding, mentorship, and financial education. Based in Abuja, Nigeria.">
-    <meta name="keywords" content="Vidavest, Youth Empowerment Nigeria, Small Business Funding Abuja, NYSC Entrepreneurship, Investment Nigeria, Wealth Building Africa, Seed Capital Nigeria">
-    <meta name="author" content="Vidavest">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://vidavest.com/">
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              gold: '#F3C77A',
+              brandPurple: '#8E44AD',
+              bgDark: '#0B0B0F',
+            },
+          }
+        }
+      }
+    </script>
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://vidavest.com/">
-    <meta property="og:title" content="Vidavest | Fueling the Ambition of Nigeria">
-    <meta property="og:description" content="Bridging the gap between potential and opportunity through ethical wealth creation and sustainable impact for Nigerian entrepreneurs.">
-    <meta property="og:image" content="https://i.postimg.cc/mrJWTxq6/IMG-20260105-WA0043-removebg-preview.png">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://vidavest.com/">
-    <meta property="twitter:title" content="Vidavest | Fueling the Ambition of Nigeria">
-    <meta property="twitter:description" content="Bridging the gap between potential and opportunity through ethical wealth creation and sustainable impact for Nigerian entrepreneurs.">
-    <meta property="twitter:image" content="https://i.postimg.cc/mrJWTxq6/IMG-20260105-WA0043-removebg-preview.png">
-
-    <!-- Favicon & Touch Icons -->
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/mrJWTxq6/IMG-20260105-WA0043-removebg-preview.png">
-    <link rel="apple-touch-icon" href="https://i.postimg.cc/mrJWTxq6/IMG-20260105-WA0043-removebg-preview.png">
+    <style type="text/css">
+        :root {
+          --gold: #F3C77A;
+          --purple: #8E44AD;
+        }
+        body {
+          background-color: #0B0B0F;
+          color: #F5F5F5;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          margin: 0;
+          overflow-x: hidden;
+        }
+        .brand-gradient-text {
+          background: linear-gradient(135deg, #8E44AD 0%, #F3C77A 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        .brand-gradient-bg {
+          background: linear-gradient(135deg, #8E44AD, #F3C77A);
+        }
+        .glass-nav {
+          background: rgba(11, 11, 15, 0.9);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-card {
+          background: rgba(20, 20, 28, 0.6);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .bg-glow-orb {
+          position: absolute;
+          width: 600px;
+          height: 600px;
+          background: radial-gradient(circle, rgba(142, 68, 173, 0.15) 0%, transparent 70%);
+          border-radius: 9999px;
+          pointer-events: none;
+          z-index: 0;
+          filter: blur(80px);
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-15px); }
+        }
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+        .animate-page-enter {
+          animation: fadeIn 0.6s ease-out forwards;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(15px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        /* Mobile Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0B0B0F; }
+        ::-webkit-scrollbar-thumb { background: #2A2A38; border-radius: 10px; }
+    </style>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script type="importmap">
 {
   "imports": {
@@ -41,7 +92,8 @@
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
     "vite": "https://esm.sh/vite@^7.3.1",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "@google/genai": "https://esm.sh/@google/genai@^1.37.0"
   }
 }
 </script>

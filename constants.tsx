@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Program } from './types';
 
@@ -13,15 +12,15 @@ export const PROGRAMS: Program[] = [
   {
     id: 'skill-builders',
     title: 'Skill Builders Program',
-    description: 'Empowering school leavers and talented youths with the tools to monetize their vocational skills.',
-    target: 'Skilled Youths',
+    description: 'Empowering school leavers and graduates with the tools to monetize their vocational skills through seed equipment.',
+    target: 'School Leavers & Graduates',
     impact: 'Direct equipment funding and business formalization.',
     icon: '🛠️'
   },
   {
     id: 'innovators-launch',
     title: 'Innovators Launch',
-    description: 'A platform for university graduates to pitch business prototypes and receive seed capital.',
+    description: 'A platform for graduates and early-stage entrepreneurs to pitch prototypes and receive growth capital.',
     target: 'University Graduates',
     impact: 'Scaling innovative prototypes into market-ready startups.',
     icon: '🚀'

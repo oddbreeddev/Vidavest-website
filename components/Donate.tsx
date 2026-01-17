@@ -1,8 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 const Donate: React.FC = () => {
   const [copied, setCopied] = useState(false);
-  const accountNumber = "1234567890"; // Injected placeholder
+  const [selectedTier, setSelectedTier] = useState<string | null>(null);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const formRef = useRef<HTMLDivElement>(null);
+  
+  const accountNumber = "1234567890"; 
+
+  const tiers = [
+    { id: 'empowerment', title: 'Empowerment Partner', amount: '50,000', desc: 'Directly funds equipment for one local artisan or school leaver.' },
+    { id: 'growth', title: 'Growth Partner', amount: '250,000', desc: 'Seed capital and 6 months mentorship for a graduate innovator.' },
+    { id: 'legacy', title: 'Legacy Partner', amount: '1,500,000+', desc: 'Funds an entire regional youth cohort in Abuja.' }
+  ];
+
+  const handleTierSelect = (title: string) => {
+    setSelectedTier(title);
+    setFormSubmitted(false);
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormSubmitted(true);
+  };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(accountNumber);
@@ -10,98 +33,193 @@ const Donate: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const donationTiers = [
-    { title: 'Empowerment Partner', amount: '50,000', description: 'Provides essential tools for one Skill Builder.', color: 'border-white/5' },
-    { title: 'Growth Partner', amount: '250,000', description: 'Covers seed capital and 6 months mentorship for an Innovator.', color: 'border-[--gold]/20 bg-purple-950/20 shadow-xl shadow-purple-900/10 scale-105' },
-    { title: 'Legacy Partner', amount: '1,500,000+', description: 'Funds an entire cohort in a specific region.', color: 'border-white/5' }
-  ];
-
   return (
-    <section className="pt-40 pb-32 px-6 md:px-12 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-24 max-w-3xl mx-auto">
-          <span className="text-[--gold] text-xs font-black uppercase tracking-[0.4em] mb-6 block">Support the Mission</span>
-          <h2 className="text-5xl md:text-7xl font-black mb-8 leading-none">Invest in <span className="brand-gradient-text">Human Capital.</span></h2>
-          <p className="text-gray-400 text-xl font-medium leading-relaxed">Your support directly fuels the seed capital for Nigeria's next generation of industry leaders.</p>
+    <section className="pt-24 pb-20 px-4 md:px-12 relative flex flex-col items-center min-h-screen">
+      <div className="bg-glow-orb -top-20 -right-20 opacity-10 pointer-events-none"></div>
+      
+      <div className="max-w-7xl mx-auto w-full relative z-10">
+        {/* Header Section */}
+        <div className="text-center mb-16 md:mb-24 mt-12">
+          <span className="text-gold text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-4 md:mb-6 block">Support the Mission</span>
+          <h2 className="text-4xl md:text-7xl lg:text-8xl font-black mb-6 md:mb-8 leading-tight tracking-tighter text-white">
+            Direct <br className="hidden sm:block"/><span className="brand-gradient-text">Empowerment.</span>
+          </h2>
+          <p className="text-gray-400 text-sm md:text-xl font-medium max-w-2xl mx-auto leading-relaxed px-4">
+            Your support fuels the seed capital and infrastructure needed to transform raw talent into sustainable enterprise.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 mb-32 items-center">
-          {donationTiers.map(tier => (
-            <div key={tier.title} className={`p-12 rounded-[3.5rem] bg-[#14141C] border ${tier.color} flex flex-col items-center text-center transition-all duration-500 group relative overflow-hidden`}>
-               <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 blur-3xl rounded-full"></div>
-               <h4 className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-8">{tier.title}</h4>
-               <p className="text-gray-400 text-lg font-black mb-2">₦</p>
-               <p className="text-6xl font-black mb-10 text-white tracking-tighter">{tier.amount}</p>
-               <p className="text-gray-500 text-sm mb-12 font-medium leading-relaxed max-w-[200px]">{tier.description}</p>
-               <button className="w-full py-5 rounded-2xl border border-white/10 text-white font-black text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300">Select Partner Tier</button>
-            </div>
+        {/* Donation Tiers */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-20 md:mb-32">
+          {tiers.map((tier, idx) => (
+            <button 
+              key={tier.id} 
+              onClick={() => handleTierSelect(tier.title)}
+              className={`p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] bg-[#14141C] border flex flex-col items-center text-center transition-all duration-500 hover:-translate-y-2 group text-left w-full ${
+                selectedTier === tier.title 
+                ? 'border-gold shadow-[0_0_40px_-10px_rgba(243,199,122,0.3)] bg-[#1a1a24]' 
+                : 'border-white/5 hover:border-brandPurple/50'
+              }`}
+            >
+               <h4 className={`text-[10px] font-black uppercase tracking-widest mb-6 md:mb-10 transition-colors ${selectedTier === tier.title ? 'text-gold' : 'text-gray-500'}`}>
+                 {tier.title}
+               </h4>
+               <p className="text-3xl md:text-5xl font-black text-white mb-4">₦{tier.amount}</p>
+               <p className="text-xs text-gray-400 font-medium mb-8 md:mb-12 max-w-[200px] leading-relaxed">{tier.desc}</p>
+               <div className={`w-full py-4 rounded-xl border font-black text-[10px] uppercase tracking-widest transition-all duration-300 ${
+                 selectedTier === tier.title 
+                 ? 'bg-gold text-black border-gold' 
+                 : 'border-white/10 group-hover:bg-white group-hover:text-black text-white'
+               }`}>
+                 {selectedTier === tier.title ? 'Tier Selected' : 'Select Partner Tier'}
+               </div>
+            </button>
           ))}
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-16 items-center">
-          <div className="lg:col-span-7">
-             <h3 className="text-4xl md:text-5xl font-black mb-10">Transparency <br/>& <span className="brand-gradient-text">Impact First.</span></h3>
-             <div className="grid sm:grid-cols-2 gap-8">
-                {[
-                  { icon: '⚡', title: 'Sustainable Cycle', desc: 'Beneficiaries reinvest 5% of future profits to support the next cohort.' },
-                  { icon: '🌱', title: 'Direct Deployment', desc: '100% of empowerment donations go to equipment and seed capital.' },
-                  { icon: '📋', title: 'Reporting', desc: 'Partners receive quarterly audits on business progress.' },
-                  { icon: '🌍', title: 'Regional Scale', desc: 'We target underserved areas to ensure equitable wealth distribution.' }
-                ].map((item, idx) => (
-                  <div key={idx} className="p-8 glass-card rounded-3xl">
-                    <div className="w-12 h-12 rounded-xl brand-gradient-bg flex items-center justify-center text-xl mb-6">{item.icon}</div>
-                    <h5 className="text-lg font-bold mb-3">{item.title}</h5>
-                    <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
-                  </div>
-                ))}
-             </div>
-          </div>
-
-          <div className="lg:col-span-5">
-            <div className="p-10 md:p-12 rounded-[3rem] bg-gradient-to-br from-[#1A1A24] to-[#0B0B0F] border border-white/10 shadow-2xl relative overflow-hidden group">
-              <div className="absolute -top-20 -right-20 w-64 h-64 bg-purple-600/20 rounded-full blur-[80px]"></div>
+        {/* Interactive Interaction Section */}
+        <div ref={formRef} className="scroll-mt-32">
+          {!selectedTier ? (
+            <div className="text-center py-20 border border-dashed border-white/5 rounded-[3rem] animate-pulse">
+               <p className="text-gray-600 text-[10px] font-black uppercase tracking-[0.4em]">Select an empowerment tier above to proceed with your partnership</p>
+            </div>
+          ) : (
+            <div className="grid lg:grid-cols-12 gap-10 md:gap-16 items-start animate-page-enter">
               
-              <div className="relative z-10">
-                <div className="flex justify-between items-start mb-12">
-                  <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-2xl">🏦</div>
-                  <img src="https://i.postimg.cc/mrJWTxq6/IMG-20260105-WA0043-removebg-preview.png" alt="Vidavest Logo" className="w-12 opacity-50 grayscale" />
-                </div>
-                
-                <p className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] mb-2">Official Fund Account</p>
-                <h4 className="text-2xl font-black text-white mb-10">VIDAVEST EMPOWERMENT</h4>
-                
-                <div className="space-y-6">
-                  <div className="bg-black/40 p-6 rounded-2xl border border-white/5">
-                    <p className="text-[9px] font-black text-gray-600 uppercase tracking-widest mb-1">Account Number</p>
-                    <p className="text-4xl font-black brand-gradient-text tracking-[0.2em]">{accountNumber}</p>
-                  </div>
+              {/* Left Column: Form or Success */}
+              <div className="lg:col-span-6 w-full">
+                <div className="p-8 md:p-14 rounded-[3rem] bg-[#14141C] border border-white/10 shadow-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 blur-3xl rounded-full"></div>
                   
-                  <div className="flex justify-between items-end">
-                    <div>
-                      <p className="text-[9px] font-black text-gray-600 uppercase tracking-widest mb-1">Bank Name</p>
-                      <p className="text-lg font-bold text-white">Zenith Bank PLC</p>
+                  {formSubmitted ? (
+                    <div className="py-10 text-center animate-page-enter">
+                      <div className="w-20 h-20 rounded-full bg-gold/10 flex items-center justify-center text-3xl mx-auto mb-8">✅</div>
+                      <h3 className="text-3xl font-black text-white mb-4">Registration Logged.</h3>
+                      <p className="text-gray-400 font-medium mb-10 leading-relaxed">
+                        Thank you for committing to the <span className="text-gold font-bold">{selectedTier}</span> level. 
+                        Please use the account details provided to complete your impact investment.
+                      </p>
+                      <button 
+                        onClick={() => setFormSubmitted(false)}
+                        className="text-[10px] font-black text-gray-500 uppercase tracking-widest hover:text-white transition"
+                      >
+                        Edit Information
+                      </button>
                     </div>
-                    <div className="text-right">
-                      <p className="text-[9px] font-black text-gray-600 uppercase tracking-widest mb-1">Branch</p>
-                      <p className="text-lg font-bold text-white">Abuja FCT</p>
+                  ) : (
+                    <form onSubmit={handleFormSubmit} className="space-y-8">
+                       <div className="flex justify-between items-center mb-4">
+                          <h4 className="text-xl font-black text-white uppercase tracking-widest">Partnership Details</h4>
+                          <span className="text-[9px] font-black text-gold bg-gold/10 px-3 py-1 rounded-full uppercase tracking-widest border border-gold/20">
+                            {selectedTier}
+                          </span>
+                       </div>
+
+                       <div className="space-y-6">
+                          <div className="space-y-2">
+                            <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Full Name / Organization</label>
+                            <input required type="text" className="w-full bg-black/40 border border-white/5 rounded-2xl p-5 text-white focus:border-gold outline-none transition text-sm font-bold" placeholder="Your name" />
+                          </div>
+                          
+                          <div className="grid sm:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Email</label>
+                              <input required type="email" className="w-full bg-black/40 border border-white/5 rounded-2xl p-5 text-white focus:border-gold outline-none transition text-sm font-bold" placeholder="Email address" />
+                            </div>
+                            <div className="space-y-2">
+                              <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Phone Number</label>
+                              <input required type="tel" className="w-full bg-black/40 border border-white/5 rounded-2xl p-5 text-white focus:border-gold outline-none transition text-sm font-bold" placeholder="+234" />
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Commitment Frequency</label>
+                            <div className="grid grid-cols-2 gap-4">
+                               {['One-Time Support', 'Monthly Partner'].map(opt => (
+                                 <label key={opt} className="relative cursor-pointer">
+                                   <input type="radio" name="freq" className="peer sr-only" defaultChecked={opt === 'One-Time Support'} />
+                                   <div className="p-4 text-center rounded-xl border border-white/5 bg-black/20 text-[10px] font-bold text-gray-500 peer-checked:border-gold peer-checked:text-gold peer-checked:bg-gold/5 transition-all">
+                                     {opt}
+                                   </div>
+                                 </label>
+                               ))}
+                            </div>
+                          </div>
+                       </div>
+
+                       <button type="submit" className="w-full brand-gradient-bg text-black py-5 rounded-2xl font-black text-sm hover:scale-[1.01] transition shadow-xl uppercase tracking-widest mt-4">
+                         Confirm Partnership
+                       </button>
+                    </form>
+                  )}
+                </div>
+              </div>
+
+              {/* Right Column: Bank Details (Visible only after form or always as "Next Step") */}
+              <div className={`lg:col-span-6 w-full transition-all duration-700 ${formSubmitted ? 'opacity-100 scale-100' : 'opacity-40 grayscale blur-[2px] pointer-events-none'}`}>
+                <div className="p-8 md:p-14 rounded-[3rem] bg-gradient-to-br from-[#1A1A24] to-[#0B0B0F] border border-white/10 shadow-2xl relative group overflow-hidden">
+                  <div className="absolute -top-10 -right-10 w-48 h-48 bg-brandPurple/10 rounded-full blur-[80px] pointer-events-none"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="flex justify-between items-center mb-10">
+                      <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 flex items-center justify-center text-2xl md:text-3xl">🏦</div>
+                      <div className="w-16 h-16 md:w-20 md:h-20 drop-shadow-[0_0_12px_rgba(255,255,255,0.25)]">
+                        <img src="https://i.postimg.cc/mrJWTxq6/IMG-20260105-WA0043-removebg-preview.png" alt="Vidavest" className="w-full h-full object-contain brightness-110" />
+                      </div>
                     </div>
+                    
+                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 md:mb-3">Step 2: Transfer Activation</p>
+                    <h4 className="text-2xl md:text-3xl font-black text-white mb-8 md:mb-10 tracking-tighter uppercase">Official <br className="sm:hidden" />Bank Portal</h4>
+                    
+                    <div className="space-y-6">
+                      <div className="bg-black/60 p-6 md:p-8 rounded-[1.5rem] border border-white/5 group-hover:border-gold/30 transition-all">
+                        <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest mb-2">Account Number</p>
+                        <p className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-[0.05em] break-all">{accountNumber}</p>
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row justify-between gap-4 px-2">
+                        <div>
+                          <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest mb-1">Bank Name</p>
+                          <p className="text-sm md:text-base font-bold text-gray-200 uppercase tracking-wider">Zenith Bank PLC</p>
+                        </div>
+                        <div className="sm:text-right">
+                          <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest mb-1">Account Type</p>
+                          <p className="text-sm md:text-base font-bold text-gold uppercase tracking-wider">Corporate Account</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button 
+                      onClick={copyToClipboard}
+                      className="w-full mt-10 md:mt-12 py-4 md:py-5 rounded-xl bg-white text-black font-black text-[10px] md:text-xs flex items-center justify-center gap-3 hover:bg-gold transition-all active:scale-95 uppercase tracking-widest shadow-xl"
+                    >
+                      {copied ? '✅ COPIED TO CLIPBOARD' : '📄 COPY ACCOUNT DETAILS'}
+                    </button>
                   </div>
                 </div>
-
-                <button 
-                  onClick={copyToClipboard}
-                  className="w-full mt-12 py-5 rounded-2xl bg-white text-black font-black text-sm flex items-center justify-center gap-3 hover:bg-[--gold] transition-all duration-300 active:scale-95 uppercase tracking-widest"
-                >
-                  {copied ? (
-                    <><span>✅</span> Copied</>
-                  ) : (
-                    <><span>📄</span> Copy Account Details</>
-                  )}
-                </button>
+                <p className="text-[9px] text-center text-gray-700 font-bold uppercase tracking-[0.4em] mt-8 italic">Verified Partnership Hub • Abuja FCT Nigeria</p>
               </div>
             </div>
-            <p className="text-[10px] text-center text-gray-600 font-bold uppercase tracking-[0.4em] mt-8">Secure Corporate Transfer Only</p>
-          </div>
+          )}
+        </div>
+
+        {/* Verified Impact Footer */}
+        <div className="mt-32 border-t border-white/5 pt-20">
+           <h3 className="text-3xl md:text-5xl font-black leading-tight text-white mb-16 text-center">Transparent <span className="text-gold">Sponsorship.</span></h3>
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { icon: '⚡', title: 'Circular Model', desc: 'Successful founders reinvest 5% back.' },
+                { icon: '🌱', title: '100% Direct', desc: 'Funds go purely to equipment and capital.' },
+                { icon: '📋', title: 'Audit Reports', desc: 'Quarterly transparency for all partners.' },
+                { icon: '🌍', title: 'Scale Focused', desc: 'Targeting underserved Nigerian states.' }
+              ].map((item, idx) => (
+                <div key={idx} className="p-8 glass-card rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
+                  <div className="w-12 h-12 rounded-xl brand-gradient-bg flex items-center justify-center text-xl mb-6 shadow-lg">{item.icon}</div>
+                  <h5 className="text-base font-black mb-2 text-white">{item.title}</h5>
+                  <p className="text-xs text-gray-500 font-medium leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
+           </div>
         </div>
       </div>
     </section>
