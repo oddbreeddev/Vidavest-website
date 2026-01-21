@@ -1,4 +1,3 @@
-
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
@@ -12,13 +11,16 @@ interface State {
 
 /**
  * Standard React Error Boundary implementation to catch and handle UI failures gracefully.
- * Inherits from Component<Props, State> to ensure proper typing of this.props and this.state.
  */
+// Explicitly extending Component with generic types to fix state/props accessibility issues
 class ErrorBoundary extends Component<Props, State> {
-  // Fixed: Use class property for state initialization to resolve 'Property state does not exist' error
-  public state: State = {
-    hasError: false
-  };
+  // Initialize state via constructor to ensure proper typing inheritance
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      hasError: false
+    };
+  }
 
   /**
    * Lifecycle method called when a child component throws an error.
@@ -38,9 +40,8 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    // Fixed: Accessed this.state which is now correctly typed from inheritance
+    // Accessing inherited state and props members
     if (this.state.hasError) {
-      // Fixed: Accessed this.props which is now correctly typed from inheritance
       return this.props.fallback || (
         <div className="py-20 px-6 text-center bg-[#0B0B0F] border border-red-500/10 rounded-[3rem] my-10 mx-auto max-w-2xl">
           <div className="text-5xl mb-6">🛠️</div>
