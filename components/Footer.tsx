@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Page } from '../types';
 
@@ -68,7 +69,16 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
 
         <div className="pt-10 border-t border-[#2A2A38] flex flex-col md:flex-row justify-between items-center gap-6 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em]">
-          <p>© 2026 VIDAVEST EMPOWERMENT.</p>
+          <div className="flex flex-col md:items-start items-center gap-2">
+            <p>© 2026 VIDAVEST EMPOWERMENT.</p>
+            <button 
+              onClick={() => onNavigate(Page.Admin)} 
+              className="flex items-center gap-2 text-gray-800 hover:text-gold transition-colors group"
+            >
+              <span className="w-1 h-1 rounded-full bg-current opacity-50 group-hover:scale-150 transition-transform"></span>
+              Admin Access
+            </button>
+          </div>
           <div className="flex space-x-6">
             <button onClick={() => onNavigate(Page.Privacy)} className="hover:text-white transition">Privacy</button>
             <button onClick={() => onNavigate(Page.Terms)} className="hover:text-white transition">Terms</button>

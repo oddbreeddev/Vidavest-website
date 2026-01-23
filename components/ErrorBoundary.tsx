@@ -1,3 +1,4 @@
+
 import React, { ErrorInfo, ReactNode } from 'react';
 
 interface Props {
@@ -13,13 +14,10 @@ interface State {
  * Standard React Error Boundary implementation to catch and handle UI failures gracefully.
  */
 class ErrorBoundary extends React.Component<Props, State> {
-  // Fix: Move state initialization to constructor to ensure proper inheritance of 'props' and 'state' from React.Component
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      hasError: false
-    };
-  }
+  // Use a class property for state to ensure TypeScript correctly identifies the state type on the instance
+  public state: State = {
+    hasError: false
+  };
 
   /**
    * Update state so the next render will show the fallback UI.
@@ -28,17 +26,25 @@ class ErrorBoundary extends React.Component<Props, State> {
     return { hasError: true };
   }
 
+  /**
+   * Capture error details for logging.
+   */
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // You can also log the error to an error reporting service
+    // Log the error for strategy and tech teams
     console.error("Uncaught error:", error, errorInfo);
   }
 
+  /**
+   * Render method to display either the error fallback or children.
+   */
   public render(): ReactNode {
-    // Accessing state and props via React.Component inheritance
-    // Fix: this.props and this.state are now correctly typed through React.Component<Props, State>
-    if (this.state.hasError) {
+    // Explicitly destructure from this.state and this.props to satisfy TypeScript compiler
+    const { hasError } = this.state;
+    const { fallback, children } = this.props;
+
+    if (hasError) {
       // Return custom fallback UI or provided fallback prop
-      return this.props.fallback || (
+      return fallback || (
         <div className="py-20 px-6 text-center bg-[#0B0B0F] border border-red-500/10 rounded-[3rem] my-10 mx-auto max-w-2xl">
           <div className="text-5xl mb-6">🛠️</div>
           <h2 className="text-2xl font-black text-white mb-4 uppercase tracking-tighter">System Recovery Required</h2>
@@ -55,7 +61,8 @@ class ErrorBoundary extends React.Component<Props, State> {
       );
     }
 
-    return this.props.children;
+    // Standard render path for nested components
+    return children;
   }
 }
 
