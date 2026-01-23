@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 const Contact: React.FC = () => {
@@ -9,14 +8,14 @@ const Contact: React.FC = () => {
           <div>
             <span className="text-[--gold] text-xs font-black uppercase tracking-[0.4em] mb-6 block">Get in Touch</span>
             <h2 className="text-5xl md:text-7xl font-black mb-10 leading-none">Let's Build the <span className="brand-gradient-text">Future.</span></h2>
-            <p className="text-gray-400 text-lg mb-12 font-medium leading-relaxed">Whether you are looking for funding, want to partner with us, or simply want to learn more about our mission, our team in Abuja is ready to assist.</p>
+            <p className="text-gray-400 text-lg mb-12 font-medium leading-relaxed">Whether you are looking for funding, want to partner with us, or simply want to learn more about our global mission, our dedicated team is ready to assist.</p>
             
             <div className="space-y-12">
               <div className="flex items-center gap-8 group">
-                <div className="w-16 h-16 rounded-[1.5rem] bg-[#14141C] border border-[#2A2A38] flex items-center justify-center text-3xl group-hover:border-purple-500/50 transition">📍</div>
+                <div className="w-16 h-16 rounded-[1.5rem] bg-[#14141C] border border-[#2A2A38] flex items-center justify-center text-3xl group-hover:border-purple-500/50 transition">🌐</div>
                 <div>
-                   <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Our Location</p>
-                   <p className="text-xl font-bold">FCT, Abuja, Nigeria</p>
+                   <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Our Reach</p>
+                   <p className="text-xl font-bold">Global Operations Hub</p>
                 </div>
               </div>
               <div className="flex items-center gap-8 group">
@@ -53,14 +52,14 @@ const Contact: React.FC = () => {
                   <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block">Subject</label>
                   <select className="w-full bg-black/40 border border-[#2A2A38] rounded-2xl p-5 text-white focus:border-[--gold] outline-none transition appearance-none">
                     <option>Partnership Inquiry</option>
-                    <option>Sponsorship</option>
+                    <option>Global Sponsorship</option>
                     <option>General Support</option>
                     <option>Media/Press</option>
                   </select>
                 </div>
                 <div>
                   <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block">Message</label>
-                  <textarea rows={6} className="w-full bg-black/40 border border-[#2A2A38] rounded-2xl p-5 text-white focus:border-[--gold] outline-none transition" placeholder="How can we help you?"></textarea>
+                  <textarea rows={6} className="w-full bg-black/40 border border-[#2A2A38] rounded-2xl p-5 text-white focus:border-[--gold] outline-none transition" placeholder="How can our global team help you?"></textarea>
                 </div>
                 <button type="submit" className="w-full brand-gradient-bg text-black py-6 rounded-2xl font-black text-lg hover:scale-[1.02] transition shadow-2xl">
                    Send Message

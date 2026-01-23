@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { apiService } from '../services/api';
 import { Submission } from '../types';
@@ -34,15 +33,15 @@ const Admin: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
           <div>
             <h1 className="text-4xl font-black text-white tracking-tighter uppercase">Vidavest <span className="text-gold">Command Center</span></h1>
-            <p className="text-gray-500 font-bold text-xs uppercase tracking-widest mt-2">Internal Management Platform • Abuja HQ</p>
+            <p className="text-gray-500 font-bold text-xs uppercase tracking-widest mt-2">Global Management Platform • Vision Control</p>
           </div>
           <div className="flex gap-4">
              <div className="p-4 bg-[#14141C] border border-white/5 rounded-2xl">
-               <p className="text-[10px] font-black text-gray-600 uppercase mb-1">Total Leads</p>
+               <p className="text-[10px] font-black text-gray-600 uppercase mb-1">Global Leads</p>
                <p className="text-2xl font-black text-white">{data.length}</p>
              </div>
              <div className="p-4 bg-[#14141C] border border-white/5 rounded-2xl">
-               <p className="text-[10px] font-black text-gray-600 uppercase mb-1">Approved</p>
+               <p className="text-[10px] font-black text-gray-600 uppercase mb-1">Impact Approved</p>
                <p className="text-2xl font-black text-gold">{data.filter(s => s.status === 'approved').length}</p>
              </div>
           </div>
@@ -51,7 +50,7 @@ const Admin: React.FC = () => {
         <div className="space-y-6">
           {data.length === 0 ? (
             <div className="py-32 text-center glass-card rounded-[3rem] border-dashed border-white/10">
-              <p className="text-gray-600 font-black uppercase tracking-[0.4em]">No submissions in vault yet.</p>
+              <p className="text-gray-600 font-black uppercase tracking-[0.4em]">No global submissions in vault yet.</p>
             </div>
           ) : (
             data.map((item) => (
@@ -74,7 +73,7 @@ const Admin: React.FC = () => {
 
                 <div className="lg:w-2/4 bg-black/30 p-6 rounded-2xl border border-white/5">
                   <p className="text-[9px] font-black text-gold uppercase tracking-widest mb-3 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-gold animate-pulse"></span> AI Analysis (Vidavest Insights)
+                    <span className="w-2 h-2 rounded-full bg-gold animate-pulse"></span> Strategic Intelligence Insight
                   </p>
                   <p className="text-sm text-gray-400 leading-relaxed font-medium italic">"{item.aiReview}"</p>
                   {item.amount && (

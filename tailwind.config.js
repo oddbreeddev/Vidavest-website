@@ -10,6 +10,10 @@ export default {
   theme: {
     extend: {
       colors: {
+        gold: '#F3C77A',
+        brandPurple: '#8E44AD',
+        bgDark: '#0B0B0F',
+        bgCard: '#14141C',
         purple: {
           950: '#1a0b2e',
         },

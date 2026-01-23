@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 const HowItWorks: React.FC = () => {
@@ -6,19 +5,19 @@ const HowItWorks: React.FC = () => {
     {
       number: '01',
       title: 'Select Your Path',
-      description: 'Choose the program that aligns with your current status—be it a student, graduate, or small business owner.',
+      description: 'Choose the program that aligns with your current status—be it a student, graduate, or emerging youth business owner.',
       icon: '🎯'
     },
     {
       number: '02',
       title: 'Apply or Pledge',
-      description: 'Fill out our simplified application form with your pitch, or select a support tier to become a mission partner.',
+      description: 'Fill out our simplified application form with your pitch, or select a support tier to become a global mission partner.',
       icon: '📝'
     },
     {
       number: '03',
       title: 'Vetting & Review',
-      description: 'Our committee in Abuja evaluates applications for feasibility and impact potential. Supporters receive instant confirmation.',
+      description: 'Our global strategy team evaluates applications for feasibility and scalability. Supporters receive instant confirmation.',
       icon: '⚖️'
     },
     {
@@ -36,7 +35,7 @@ const HowItWorks: React.FC = () => {
           <span className="text-[--gold] text-xs font-black uppercase tracking-[0.4em] mb-6 block">The Process</span>
           <h2 className="text-4xl md:text-6xl font-black mb-6">How it <span className="brand-gradient-text">Works.</span></h2>
           <p className="text-gray-500 text-lg max-w-2xl mx-auto font-medium">
-            We've streamlined the journey from ambition to achievement into four clear stages.
+            We've streamlined the journey from youth ambition to global achievement into four clear stages.
           </p>
         </div>
 

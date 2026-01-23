@@ -17,33 +17,31 @@ export const apiService = {
 
   async saveSubmission(submission: Omit<Submission, 'id' | 'createdAt' | 'status'>): Promise<Submission> {
     // Correct initialization as per rules: Always use new GoogleGenAI({ apiKey: process.env.API_KEY })
-    // Use the process.env.API_KEY string directly when initializing the client.
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const submissions = await this.getSubmissions();
     
-    let aiReview = "Vetting system initialized. Manual review pending.";
+    let aiReview = "Vetting system initialized. Global review pending.";
     
     if (submission.type === 'funding') {
       try {
         const response = await ai.models.generateContent({
           model: 'gemini-3-flash-preview',
-          contents: `Review this funding request for Vidavest (Nigeria). 
+          contents: `Review this funding request for Vidavest Global. 
           Applicant: ${submission.fullName}
           Requested: ₦${submission.amount}
           Program: ${submission.tier}
-          Task: Provide a 1-sentence risk assessment and a 1-sentence recommendation.`,
+          Task: Provide a 1-sentence risk assessment and a 1-sentence recommendation based on global entrepreneurship standards.`,
           config: {
-            systemInstruction: "You are a senior investment analyst in Abuja. Be concise, professional, and ethical."
+            systemInstruction: "You are a senior Global Investment Strategist. Be concise, visionary, and focus on scalable youth impact."
           }
         });
         
-        // Correct usage: response.text is a property, not a method.
         if (response && response.text) {
           aiReview = response.text.trim();
         }
       } catch (e) {
         console.warn("AI Vetting temporarily unavailable:", e);
-        aiReview = "Automated vetting skipped due to connection status. Requires priority manual review.";
+        aiReview = "Automated vetting skipped. Requires priority manual review by the global strategy team.";
       }
     }
 

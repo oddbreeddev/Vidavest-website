@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { PROGRAMS } from '../constants';
 import { apiService } from '../services/api';
@@ -20,7 +19,7 @@ const Programs: React.FC = () => {
 
     if (!fullName || fullName.length < 3) newErrors.fullName = "Full name required";
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) newErrors.email = "Valid email required";
-    if (!phone || phone.length < 10) newErrors.phone = "Valid phone required";
+    if (!phone || phone.length < 7) newErrors.phone = "Valid contact number required";
     if (!amount || isNaN(Number(amount.replace(/,/g, '')))) newErrors.amount = "Valid numeric amount required";
 
     setErrors(newErrors);
@@ -48,7 +47,6 @@ const Programs: React.FC = () => {
 
     setLoading(true);
     try {
-      // Use the new persistence and AI service
       await apiService.saveSubmission({
         type: 'funding',
         tier: selectedProgram,
@@ -59,14 +57,14 @@ const Programs: React.FC = () => {
       });
 
       setSubmitted(true);
-      setNotification({ message: "Application submitted and AI-vetted successfully!", type: 'success' });
+      setNotification({ message: "Application submitted and vetted by our global AI systems!", type: 'success' });
       setTimeout(() => {
         setSubmitted(false);
         setSelectedProgram("");
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 5000);
     } catch (err) {
-      setNotification({ message: "Network connection unstable. Retrying in background...", type: 'warning' });
+      setNotification({ message: "Network connection unstable. Retrying...", type: 'warning' });
     } finally {
       setLoading(false);
     }
@@ -96,7 +94,7 @@ const Programs: React.FC = () => {
           <span className="text-gold text-[10px] font-black uppercase tracking-[0.5em] mb-6 block">Access Capital</span>
           <h2 className="text-5xl md:text-8xl font-black mb-8 leading-[0.9] tracking-tighter">Choose Your <br/><span className="brand-gradient-text">Growth Path.</span></h2>
           <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto font-medium leading-relaxed">
-            Select the program that aligns with your current status. Our funding model is designed to scale with your ambition.
+            Select the program that aligns with your current status. Our funding model is built to scale with global youth ambition.
           </p>
         </div>
 
@@ -146,7 +144,7 @@ const Programs: React.FC = () => {
                    Application Phase
                  </div>
                  <h3 className="text-4xl md:text-6xl font-black mb-8 leading-[1.1] tracking-tighter text-white">
-                   The Vidavest <br/><span className="text-gold">Funding Process.</span>
+                   The Vidavest <br/><span className="text-gold">Global Process.</span>
                  </h3>
                  <p className="text-gray-400 text-lg mb-12 font-medium leading-relaxed">
                    You are applying for the <span className="text-white font-bold">{selectedProgram}</span>. 
@@ -158,7 +156,7 @@ const Programs: React.FC = () => {
                         <div>
                           <h5 className="text-sm font-black text-white uppercase tracking-wider mb-1">{step}</h5>
                           <p className="text-xs text-gray-500 font-medium leading-relaxed italic">
-                            {i === 1 ? 'Automated analysis powered by Gemini.' : 'Verified process for Abuja partners.'}
+                            {i === 1 ? 'Automated analysis powered by Gemini.' : 'Verified process by our global partners.'}
                           </p>
                         </div>
                       </div>
@@ -179,7 +177,7 @@ const Programs: React.FC = () => {
                      <div className="text-center py-24 animate-page-enter">
                         <div className="text-7xl mb-10">📬</div>
                         <h4 className="text-4xl font-black mb-6 tracking-tighter">Request Received.</h4>
-                        <p className="text-gray-400 font-medium max-w-sm mx-auto leading-relaxed">Your application has been logged and the AI-initial review is ready for the Abuja team.</p>
+                        <p className="text-gray-400 font-medium max-w-sm mx-auto leading-relaxed">Your application has been logged and the AI-initial review is ready for the strategy team.</p>
                      </div>
                    ) : (
                      <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
@@ -188,12 +186,12 @@ const Programs: React.FC = () => {
                        <div className="grid md:grid-cols-2 gap-8">
                           <div className="space-y-2">
                             <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Full Name</label>
-                            <input name="fullName" onChange={handleInputChange} required type="text" className={`w-full bg-black/40 border rounded-2xl p-5 text-white outline-none transition text-sm font-bold ${errors.fullName ? 'border-red-500/50 shadow-[inset_0_0_10px_rgba(239,68,68,0.1)]' : 'border-white/5 focus:border-gold'}`} placeholder="As written on ID" />
+                            <input name="fullName" onChange={handleInputChange} required type="text" className={`w-full bg-black/40 border rounded-2xl p-5 text-white outline-none transition text-sm font-bold ${errors.fullName ? 'border-red-500/50 shadow-[inset_0_0_10px_rgba(239,68,68,0.1)]' : 'border-white/5 focus:border-gold'}`} placeholder="Legal Name" />
                             {errors.fullName && <p className="text-[8px] text-red-500 font-black uppercase tracking-widest ml-1">{errors.fullName}</p>}
                           </div>
                           <div className="space-y-2">
                             <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Phone Number</label>
-                            <input name="phone" onChange={handleInputChange} required type="tel" className={`w-full bg-black/40 border rounded-2xl p-5 text-white outline-none transition text-sm font-bold ${errors.phone ? 'border-red-500/50 shadow-[inset_0_0_10px_rgba(239,68,68,0.1)]' : 'border-white/5 focus:border-gold'}`} placeholder="+234..." />
+                            <input name="phone" onChange={handleInputChange} required type="tel" className={`w-full bg-black/40 border rounded-2xl p-5 text-white outline-none transition text-sm font-bold ${errors.phone ? 'border-red-500/50 shadow-[inset_0_0_10px_rgba(239,68,68,0.1)]' : 'border-white/5 focus:border-gold'}`} placeholder="Contact Number" />
                           </div>
                        </div>
 
@@ -203,13 +201,13 @@ const Programs: React.FC = () => {
                             <input name="email" onChange={handleInputChange} required type="email" className={`w-full bg-black/40 border rounded-2xl p-5 text-white outline-none transition text-sm font-bold ${errors.email ? 'border-red-500/50 shadow-[inset_0_0_10px_rgba(239,68,68,0.1)]' : 'border-white/5 focus:border-gold'}`} placeholder="name@domain.com" />
                           </div>
                           <div className="space-y-2">
-                            <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Est. Funding (₦)</label>
+                            <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Est. Funding (Base ₦)</label>
                             <input name="amount" onChange={handleInputChange} required type="text" className={`w-full bg-black/40 border rounded-2xl p-5 text-gold outline-none transition text-lg font-black ${errors.amount ? 'border-red-500/50 shadow-[inset_0_0_10px_rgba(239,68,68,0.1)]' : 'border-white/5 focus:border-gold'}`} placeholder="500,000" />
                           </div>
                        </div>
 
                        <button type="submit" disabled={loading} className={`w-full brand-gradient-bg text-black py-6 rounded-2xl font-black text-lg transition shadow-xl uppercase tracking-widest ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.01] active:scale-95'}`}>
-                         {loading ? 'Processing Securely...' : 'Submit Funding Request'}
+                         {loading ? 'Processing Securely...' : 'Submit Global Request'}
                        </button>
                      </form>
                    )}

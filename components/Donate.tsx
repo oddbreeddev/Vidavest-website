@@ -9,9 +9,9 @@ const Donate: React.FC = () => {
   const accountNumber = "1234567890"; 
 
   const tiers = [
-    { id: 'empowerment', title: 'Empowerment Partner', amount: '50,000', desc: 'Directly funds equipment for one local artisan or school leaver.' },
-    { id: 'growth', title: 'Growth Partner', amount: '250,000', desc: 'Seed capital and 6 months mentorship for a graduate innovator.' },
-    { id: 'legacy', title: 'Legacy Partner', amount: '1,500,000+', desc: 'Funds an entire regional youth cohort in Abuja.' }
+    { id: 'empowerment', title: 'Empowerment Partner', amount: '50,000', desc: 'Directly funds equipment for one local artisan or ambitious youth.' },
+    { id: 'growth', title: 'Growth Partner', amount: '250,000', desc: 'Seed capital and 6 months mentorship for a global youth innovator.' },
+    { id: 'legacy', title: 'Legacy Partner', amount: '1,500,000+', desc: 'Funds an entire regional youth cohort across the platform.' }
   ];
 
   const handleTierSelect = (title: string) => {
@@ -45,7 +45,7 @@ const Donate: React.FC = () => {
             Direct <br className="hidden sm:block"/><span className="brand-gradient-text">Empowerment.</span>
           </h2>
           <p className="text-gray-400 text-sm md:text-xl font-medium max-w-2xl mx-auto leading-relaxed px-4">
-            Your support fuels the seed capital and infrastructure needed to transform raw talent into sustainable enterprise.
+            Your support fuels the seed capital and infrastructure needed to transform global youth talent into sustainable enterprise.
           </p>
         </div>
 
@@ -96,7 +96,7 @@ const Donate: React.FC = () => {
                       <div className="w-20 h-20 rounded-full bg-gold/10 flex items-center justify-center text-3xl mx-auto mb-8">✅</div>
                       <h3 className="text-3xl font-black text-white mb-4">Registration Logged.</h3>
                       <p className="text-gray-400 font-medium mb-10 leading-relaxed">
-                        Thank you for committing to the <span className="text-gold font-bold">{selectedTier}</span> level. 
+                        Thank you for committing to the <span className="text-gold font-bold">{selectedTier} level</span>. 
                         Please use the account details provided to complete your impact investment.
                       </p>
                       <button 
@@ -127,8 +127,8 @@ const Donate: React.FC = () => {
                               <input required type="email" className="w-full bg-black/40 border border-white/5 rounded-2xl p-5 text-white focus:border-gold outline-none transition text-sm font-bold" placeholder="Email address" />
                             </div>
                             <div className="space-y-2">
-                              <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Phone Number</label>
-                              <input required type="tel" className="w-full bg-black/40 border border-white/5 rounded-2xl p-5 text-white focus:border-gold outline-none transition text-sm font-bold" placeholder="+234" />
+                              <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Contact Number</label>
+                              <input required type="tel" className="w-full bg-black/40 border border-white/5 rounded-2xl p-5 text-white focus:border-gold outline-none transition text-sm font-bold" placeholder="Phone" />
                             </div>
                           </div>
 
@@ -155,7 +155,7 @@ const Donate: React.FC = () => {
                 </div>
               </div>
 
-              {/* Right Column: Bank Details (Visible only after form or always as "Next Step") */}
+              {/* Right Column: Bank Details */}
               <div className={`lg:col-span-6 w-full transition-all duration-700 ${formSubmitted ? 'opacity-100 scale-100' : 'opacity-40 grayscale blur-[2px] pointer-events-none'}`}>
                 <div className="p-8 md:p-14 rounded-[3rem] bg-gradient-to-br from-[#1A1A24] to-[#0B0B0F] border border-white/10 shadow-2xl relative group overflow-hidden">
                   <div className="absolute -top-10 -right-10 w-48 h-48 bg-brandPurple/10 rounded-full blur-[80px] pointer-events-none"></div>
@@ -168,8 +168,8 @@ const Donate: React.FC = () => {
                       </div>
                     </div>
                     
-                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 md:mb-3">Step 2: Transfer Activation</p>
-                    <h4 className="text-2xl md:text-3xl font-black text-white mb-8 md:mb-10 tracking-tighter uppercase">Official <br className="sm:hidden" />Bank Portal</h4>
+                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 md:mb-3">Step 2: Activation</p>
+                    <h4 className="text-2xl md:text-3xl font-black text-white mb-8 md:mb-10 tracking-tighter uppercase">Official <br className="sm:hidden" />Hub Account</h4>
                     
                     <div className="space-y-6">
                       <div className="bg-black/60 p-6 md:p-8 rounded-[1.5rem] border border-white/5 group-hover:border-gold/30 transition-all">
@@ -179,12 +179,12 @@ const Donate: React.FC = () => {
                       
                       <div className="flex flex-col sm:flex-row justify-between gap-4 px-2">
                         <div>
-                          <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest mb-1">Bank Name</p>
+                          <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest mb-1">Institution</p>
                           <p className="text-sm md:text-base font-bold text-gray-200 uppercase tracking-wider">Zenith Bank PLC</p>
                         </div>
                         <div className="sm:text-right">
                           <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest mb-1">Account Type</p>
-                          <p className="text-sm md:text-base font-bold text-gold uppercase tracking-wider">Corporate Account</p>
+                          <p className="text-sm md:text-base font-bold text-gold uppercase tracking-wider">Strategic Operations</p>
                         </div>
                       </div>
                     </div>
@@ -197,7 +197,7 @@ const Donate: React.FC = () => {
                     </button>
                   </div>
                 </div>
-                <p className="text-[9px] text-center text-gray-700 font-bold uppercase tracking-[0.4em] mt-8 italic">Verified Partnership Hub • Abuja FCT Nigeria</p>
+                <p className="text-[9px] text-center text-gray-700 font-bold uppercase tracking-[0.4em] mt-8 italic">Verified Partnership Hub • Global Youth Initiative</p>
               </div>
             </div>
           )}
@@ -205,13 +205,13 @@ const Donate: React.FC = () => {
 
         {/* Verified Impact Footer */}
         <div className="mt-32 border-t border-white/5 pt-20">
-           <h3 className="text-3xl md:text-5xl font-black leading-tight text-white mb-16 text-center">Transparent <span className="text-gold">Sponsorship.</span></h3>
+           <h3 className="text-3xl md:text-5xl font-black leading-tight text-white mb-16 text-center">Transparent <span className="text-gold">Impact.</span></h3>
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: '⚡', title: 'Circular Model', desc: 'Successful founders reinvest 5% back.' },
-                { icon: '🌱', title: '100% Direct', desc: 'Funds go purely to equipment and capital.' },
-                { icon: '📋', title: 'Audit Reports', desc: 'Quarterly transparency for all partners.' },
-                { icon: '🌍', title: 'Scale Focused', desc: 'Targeting underserved Nigerian states.' }
+                { icon: '⚡', title: 'Circular Model', desc: 'Successful founders reinvest back into the ecosystem.' },
+                { icon: '🌱', title: '100% Direct', desc: 'Funds go purely to equipment and growth capital.' },
+                { icon: '📋', title: 'Audit Reports', desc: 'Quarterly transparency for all global partners.' },
+                { icon: '🌍', title: 'Global Focus', desc: 'Targeting underserved states and regions worldwide.' }
               ].map((item, idx) => (
                 <div key={idx} className="p-8 glass-card rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
                   <div className="w-12 h-12 rounded-xl brand-gradient-bg flex items-center justify-center text-xl mb-6 shadow-lg">{item.icon}</div>

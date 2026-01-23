@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { ErrorInfo, ReactNode } from 'react';
 
 interface Props {
   children?: ReactNode;
@@ -12,9 +12,8 @@ interface State {
 /**
  * Standard React Error Boundary implementation to catch and handle UI failures gracefully.
  */
-// Explicitly extending Component with generic types to fix state/props accessibility issues
-class ErrorBoundary extends Component<Props, State> {
-  // Initialize state via constructor to ensure proper typing inheritance
+class ErrorBoundary extends React.Component<Props, State> {
+  // Fix: Move state initialization to constructor to ensure proper inheritance of 'props' and 'state' from React.Component
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -23,31 +22,28 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   /**
-   * Lifecycle method called when a child component throws an error.
-   * Updates the state to trigger the fallback UI render.
+   * Update state so the next render will show the fallback UI.
    */
   public static getDerivedStateFromError(_: Error): State {
     return { hasError: true };
   }
 
-  /**
-   * Lifecycle method for logging error information.
-   * Useful for debugging and tracking system errors in production.
-   */
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Log the error to console or an error reporting service
+    // You can also log the error to an error reporting service
     console.error("Uncaught error:", error, errorInfo);
   }
 
   public render(): ReactNode {
-    // Accessing inherited state and props members
+    // Accessing state and props via React.Component inheritance
+    // Fix: this.props and this.state are now correctly typed through React.Component<Props, State>
     if (this.state.hasError) {
+      // Return custom fallback UI or provided fallback prop
       return this.props.fallback || (
         <div className="py-20 px-6 text-center bg-[#0B0B0F] border border-red-500/10 rounded-[3rem] my-10 mx-auto max-w-2xl">
           <div className="text-5xl mb-6">🛠️</div>
-          <h2 className="text-2xl font-black text-white mb-4 uppercase tracking-tighter">Section Recovery Required</h2>
+          <h2 className="text-2xl font-black text-white mb-4 uppercase tracking-tighter">System Recovery Required</h2>
           <p className="text-gray-500 text-sm mb-8 leading-relaxed">
-            A minor technical glitch occurred in this component. We've logged the error for our Abuja dev team.
+            A minor technical glitch occurred in this component. We've logged the error for our global strategy and tech team.
           </p>
           <button 
             onClick={() => window.location.reload()}
@@ -59,7 +55,6 @@ class ErrorBoundary extends Component<Props, State> {
       );
     }
 
-    // Default rendering for children components
     return this.props.children;
   }
 }
