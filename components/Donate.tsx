@@ -1,10 +1,17 @@
+
 import React, { useState, useRef } from 'react';
+import { apiService } from '../services/api';
+import Notification, { NotificationType } from './Notification';
 
 const Donate: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState<{message: string, type: NotificationType} | null>(null);
+  
   const formRef = useRef<HTMLDivElement>(null);
+  const formDataRef = useRef<Record<string, string>>({});
   
   const accountNumber = "1234567890"; 
 
@@ -22,9 +29,32 @@ const Donate: React.FC = () => {
     }, 100);
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    formDataRef.current[e.target.name] = e.target.value;
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormSubmitted(true);
+    if (!selectedTier) return;
+
+    setLoading(true);
+    try {
+      await apiService.saveSubmission({
+        type: 'partnership',
+        tier: selectedTier,
+        fullName: formDataRef.current.fullName,
+        email: formDataRef.current.email,
+        phone: formDataRef.current.phone,
+        amount: tiers.find(t => t.title === selectedTier)?.amount || "0"
+      });
+      
+      setFormSubmitted(true);
+      setNotification({ message: "Partnership registered in our global vault.", type: 'success' });
+    } catch (err) {
+      setNotification({ message: "Cloud sync failed. Please check your connection.", type: 'error' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const copyToClipboard = () => {
@@ -35,10 +65,16 @@ const Donate: React.FC = () => {
 
   return (
     <section className="pt-24 pb-20 px-4 md:px-12 relative flex flex-col items-center min-h-screen">
+      {notification && (
+        <Notification 
+          message={notification.message} 
+          type={notification.type} 
+          onClose={() => setNotification(null)} 
+        />
+      )}
       <div className="bg-glow-orb -top-20 -right-20 opacity-10 pointer-events-none"></div>
       
       <div className="max-w-7xl mx-auto w-full relative z-10">
-        {/* Header Section */}
         <div className="text-center mb-16 md:mb-24 mt-12">
           <span className="text-gold text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-4 md:mb-6 block">Support the Mission</span>
           <h2 className="text-4xl md:text-7xl lg:text-8xl font-black mb-6 md:mb-8 leading-tight tracking-tighter text-white">
@@ -49,13 +85,12 @@ const Donate: React.FC = () => {
           </p>
         </div>
 
-        {/* Donation Tiers */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-20 md:mb-32">
-          {tiers.map((tier, idx) => (
+          {tiers.map((tier) => (
             <button 
               key={tier.id} 
               onClick={() => handleTierSelect(tier.title)}
-              className={`p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] bg-[#14141C] border flex flex-col items-center text-center transition-all duration-500 hover:-translate-y-2 group text-left w-full ${
+              className={`p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] bg-[#14141C] border flex flex-col items-center text-center transition-all duration-500 hover:-translate-y-2 group w-full ${
                 selectedTier === tier.title 
                 ? 'border-gold shadow-[0_0_40px_-10px_rgba(243,199,122,0.3)] bg-[#1a1a24]' 
                 : 'border-white/5 hover:border-brandPurple/50'
@@ -77,7 +112,6 @@ const Donate: React.FC = () => {
           ))}
         </div>
 
-        {/* Interactive Interaction Section */}
         <div ref={formRef} className="scroll-mt-32">
           {!selectedTier ? (
             <div className="text-center py-20 border border-dashed border-white/5 rounded-[3rem] animate-pulse">
@@ -85,16 +119,17 @@ const Donate: React.FC = () => {
             </div>
           ) : (
             <div className="grid lg:grid-cols-12 gap-10 md:gap-16 items-start animate-page-enter">
-              
-              {/* Left Column: Form or Success */}
               <div className="lg:col-span-6 w-full">
-                <div className="p-8 md:p-14 rounded-[3rem] bg-[#14141C] border border-white/10 shadow-2xl relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 blur-3xl rounded-full"></div>
-                  
+                <div className={`p-8 md:p-14 rounded-[3rem] bg-[#14141C] border border-white/10 shadow-2xl relative overflow-hidden transition-all ${loading ? 'opacity-50 pointer-events-none' : ''}`}>
+                  {loading && (
+                    <div className="absolute inset-0 z-50 bg-black/60 flex items-center justify-center backdrop-blur-sm">
+                      <div className="w-10 h-10 border-2 border-gold border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  )}
                   {formSubmitted ? (
                     <div className="py-10 text-center animate-page-enter">
                       <div className="w-20 h-20 rounded-full bg-gold/10 flex items-center justify-center text-3xl mx-auto mb-8">✅</div>
-                      <h3 className="text-3xl font-black text-white mb-4">Registration Logged.</h3>
+                      <h3 className="text-3xl font-black text-white mb-4">Intent Logged.</h3>
                       <p className="text-gray-400 font-medium mb-10 leading-relaxed">
                         Thank you for committing to the <span className="text-gold font-bold">{selectedTier} level</span>. 
                         Please use the account details provided to complete your impact investment.
@@ -114,39 +149,22 @@ const Donate: React.FC = () => {
                             {selectedTier}
                           </span>
                        </div>
-
                        <div className="space-y-6">
                           <div className="space-y-2">
                             <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Full Name / Organization</label>
-                            <input required type="text" className="w-full bg-black/40 border border-white/5 rounded-2xl p-5 text-white focus:border-gold outline-none transition text-sm font-bold" placeholder="Your name" />
+                            <input name="fullName" onChange={handleInputChange} required type="text" className="w-full bg-black/40 border border-white/5 rounded-2xl p-5 text-white focus:border-gold outline-none transition text-sm font-bold" placeholder="Your name" />
                           </div>
-                          
                           <div className="grid sm:grid-cols-2 gap-6">
                             <div className="space-y-2">
                               <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Email</label>
-                              <input required type="email" className="w-full bg-black/40 border border-white/5 rounded-2xl p-5 text-white focus:border-gold outline-none transition text-sm font-bold" placeholder="Email address" />
+                              <input name="email" onChange={handleInputChange} required type="email" className="w-full bg-black/40 border border-white/5 rounded-2xl p-5 text-white focus:border-gold outline-none transition text-sm font-bold" placeholder="Email address" />
                             </div>
                             <div className="space-y-2">
                               <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Contact Number</label>
-                              <input required type="tel" className="w-full bg-black/40 border border-white/5 rounded-2xl p-5 text-white focus:border-gold outline-none transition text-sm font-bold" placeholder="Phone" />
-                            </div>
-                          </div>
-
-                          <div className="space-y-2">
-                            <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Commitment Frequency</label>
-                            <div className="grid grid-cols-2 gap-4">
-                               {['One-Time Support', 'Monthly Partner'].map(opt => (
-                                 <label key={opt} className="relative cursor-pointer">
-                                   <input type="radio" name="freq" className="peer sr-only" defaultChecked={opt === 'One-Time Support'} />
-                                   <div className="p-4 text-center rounded-xl border border-white/5 bg-black/20 text-[10px] font-bold text-gray-500 peer-checked:border-gold peer-checked:text-gold peer-checked:bg-gold/5 transition-all">
-                                     {opt}
-                                   </div>
-                                 </label>
-                               ))}
+                              <input name="phone" onChange={handleInputChange} required type="tel" className="w-full bg-black/40 border border-white/5 rounded-2xl p-5 text-white focus:border-gold outline-none transition text-sm font-bold" placeholder="Phone" />
                             </div>
                           </div>
                        </div>
-
                        <button type="submit" className="w-full brand-gradient-bg text-black py-5 rounded-2xl font-black text-sm hover:scale-[1.01] transition shadow-xl uppercase tracking-widest mt-4">
                          Confirm Partnership
                        </button>
@@ -155,11 +173,9 @@ const Donate: React.FC = () => {
                 </div>
               </div>
 
-              {/* Right Column: Bank Details */}
               <div className={`lg:col-span-6 w-full transition-all duration-700 ${formSubmitted ? 'opacity-100 scale-100' : 'opacity-40 grayscale blur-[2px] pointer-events-none'}`}>
                 <div className="p-8 md:p-14 rounded-[3rem] bg-gradient-to-br from-[#1A1A24] to-[#0B0B0F] border border-white/10 shadow-2xl relative group overflow-hidden">
                   <div className="absolute -top-10 -right-10 w-48 h-48 bg-brandPurple/10 rounded-full blur-[80px] pointer-events-none"></div>
-                  
                   <div className="relative z-10">
                     <div className="flex justify-between items-center mb-10">
                       <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 flex items-center justify-center text-2xl md:text-3xl">🏦</div>
@@ -167,16 +183,13 @@ const Donate: React.FC = () => {
                         <img src="https://i.postimg.cc/mrJWTxq6/IMG-20260105-WA0043-removebg-preview.png" alt="Vidavest" className="w-full h-full object-contain brightness-110" />
                       </div>
                     </div>
-                    
                     <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 md:mb-3">Step 2: Activation</p>
                     <h4 className="text-2xl md:text-3xl font-black text-white mb-8 md:mb-10 tracking-tighter uppercase">Official <br className="sm:hidden" />Hub Account</h4>
-                    
                     <div className="space-y-6">
                       <div className="bg-black/60 p-6 md:p-8 rounded-[1.5rem] border border-white/5 group-hover:border-gold/30 transition-all">
                         <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest mb-2">Account Number</p>
                         <p className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-[0.05em] break-all">{accountNumber}</p>
                       </div>
-                      
                       <div className="flex flex-col sm:flex-row justify-between gap-4 px-2">
                         <div>
                           <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest mb-1">Institution</p>
@@ -188,7 +201,6 @@ const Donate: React.FC = () => {
                         </div>
                       </div>
                     </div>
-
                     <button 
                       onClick={copyToClipboard}
                       className="w-full mt-10 md:mt-12 py-4 md:py-5 rounded-xl bg-white text-black font-black text-[10px] md:text-xs flex items-center justify-center gap-3 hover:bg-gold transition-all active:scale-95 uppercase tracking-widest shadow-xl"
@@ -203,7 +215,6 @@ const Donate: React.FC = () => {
           )}
         </div>
 
-        {/* Verified Impact Footer */}
         <div className="mt-32 border-t border-white/5 pt-20">
            <h3 className="text-3xl md:text-5xl font-black leading-tight text-white mb-16 text-center">Transparent <span className="text-gold">Impact.</span></h3>
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

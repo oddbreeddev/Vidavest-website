@@ -69,15 +69,17 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
 
         <div className="pt-10 border-t border-[#2A2A38] flex flex-col md:flex-row justify-between items-center gap-6 text-[9px] font-black text-gray-700 uppercase tracking-[0.3em]">
-          <div className="flex flex-col md:items-start items-center gap-2">
+          <div className="flex flex-col md:items-start items-center gap-6">
             <p>© 2026 VIDAVEST EMPOWERMENT.</p>
-            <button 
-              onClick={() => onNavigate(Page.Admin)} 
-              className="flex items-center gap-2 text-gray-800 hover:text-gold transition-colors group"
-            >
-              <span className="w-1 h-1 rounded-full bg-current opacity-50 group-hover:scale-150 transition-transform"></span>
-              Admin Access
-            </button>
+            <div className="flex items-center gap-4">
+               <button 
+                onClick={() => onNavigate(Page.Admin)} 
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#14141C] border border-white/5 text-gray-500 hover:text-gold hover:border-gold/40 transition-all group shadow-xl"
+              >
+                <span className="text-sm">🛡️</span>
+                <span className="text-[10px] font-black uppercase tracking-widest">Command Vault</span>
+              </button>
+            </div>
           </div>
           <div className="flex space-x-6">
             <button onClick={() => onNavigate(Page.Privacy)} className="hover:text-white transition">Privacy</button>

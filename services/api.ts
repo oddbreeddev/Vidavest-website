@@ -1,146 +1,180 @@
 
 import { GoogleGenAI } from "@google/genai";
-import { createClient } from "@supabase/supabase-js";
+import { initializeApp, getApp, getApps, FirebaseApp } from "firebase/app";
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  getDocs, 
+  updateDoc, 
+  doc, 
+  query, 
+  orderBy, 
+  Timestamp,
+  Firestore
+} from "firebase/firestore";
 import { Submission } from "../types";
 
 /**
- * PRODUCTION CREDENTIALS
- * Hardcoded as primary fallback to prevent initialization errors in the browser environment.
+ * FIREBASE CONFIGURATION
+ * Safely extracting config with fallbacks to prevent ReferenceErrors.
  */
-const DEFAULT_SUPABASE_URL = "https://rsvvsqvoukjjflnqcu.supabase.co";
-const DEFAULT_SUPABASE_KEY = "sb_publishable_8DCplz8MO7FPRPG-DYQX5g_RvxDgtzo";
+const getFirebaseConfig = () => {
+  try {
+    return (window as any).process?.env?.FIREBASE_CONFIG || {};
+  } catch (e) {
+    return {};
+  }
+};
 
-// Safely access environment variables with hardcoded fallbacks
-const supabaseUrl = process.env.SUPABASE_URL || DEFAULT_SUPABASE_URL;
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || DEFAULT_SUPABASE_KEY;
+const firebaseConfig = getFirebaseConfig();
 
-// Initialize Supabase Client
-// This will no longer throw "supabaseUrl is required" as we have guaranteed defaults
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+let app: FirebaseApp | null = null;
+let db: Firestore | null = null;
+
+// Initialize Firebase only if config is present to avoid initialization errors
+if (firebaseConfig.projectId) {
+  app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+  db = getFirestore(app);
+}
 
 export const apiService = {
   /**
-   * Fetch all submissions from the Supabase 'submissions' table.
+   * Fetch all submissions from the Firestore 'submissions' collection.
    */
   async getSubmissions(): Promise<Submission[]> {
     try {
-      const { data, error } = await supabase
-        .from('submissions')
-        .select('*')
-        .order('createdAt', { ascending: false });
-
-      if (error) {
-        console.error("Supabase Error:", error.message);
+      if (!db) {
+        console.warn("Firestore database not initialized. Check FIREBASE_CONFIG.");
         return [];
       }
-      return data || [];
+      
+      const submissionsCol = collection(db, 'submissions');
+      const q = query(submissionsCol, orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(q);
+      
+      return snapshot.docs.map(d => {
+        const data = d.data();
+        return {
+          id: d.id,
+          ...data,
+          createdAt: data.createdAt instanceof Timestamp 
+            ? data.createdAt.toDate().toISOString() 
+            : data.createdAt
+        } as Submission;
+      });
     } catch (e) {
-      console.error("Failed to load global submissions:", e);
+      console.error("Firebase Read Error:", e);
       return [];
     }
   },
 
   /**
-   * Save a new application to Supabase and trigger AI vetting via Gemini.
+   * Save a new application to Firestore and trigger AI vetting via Gemini.
    */
   async saveSubmission(submission: Omit<Submission, 'id' | 'createdAt' | 'status'>): Promise<Submission> {
+    // Fix: Use process.env.API_KEY directly for initializing GoogleGenAI.
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-    let aiReview = "Vetting system initialized. Global review pending.";
     
-    // Perform Real-time AI Vetting using Gemini 3 Pro for complex reasoning tasks
-    if (submission.type === 'funding') {
-      try {
+    let aiReview = submission.type === 'funding' 
+      ? "Vetting system initialized. Intelligence review pending." 
+      : "Partnership registered. Strategic evaluation in progress.";
+    
+    try {
+      if (process.env.API_KEY) {
+        const prompt = submission.type === 'funding' 
+          ? `Analyze this funding application for Vidavest.
+             Applicant: ${submission.fullName}
+             Program: ${submission.tier}
+             Amount: ₦${submission.amount}
+             Provide a professional 2-sentence executive summary focusing on risk and high-level potential.`
+          : `Analyze this strategic partnership for Vidavest.
+             Partner: ${submission.fullName}
+             Tier: ${submission.tier}
+             Provide a 2-sentence executive summary on the strategic value of this partnership.`;
+
+        // Fix: Call generateContent and access the .text property directly.
         const response = await ai.models.generateContent({
           model: 'gemini-3-pro-preview',
-          contents: `Analyze this funding application for Vidavest.
-          Name: ${submission.fullName}
-          Tier: ${submission.tier}
-          Amount: ₦${submission.amount}
-          Contact: ${submission.email} / ${submission.phone}
-          
-          Provide a professional 2-sentence executive summary focusing on risk and potential impact.`,
+          contents: prompt,
           config: {
-            systemInstruction: "You are the Vidavest Global Chief Risk Officer. Be insightful, concise, and professional."
+            systemInstruction: "You are the Vidavest Chief Operating Officer. Provide insightful, concise, and professional risk/benefit analysis.",
+            thinkingConfig: { thinkingBudget: 2048 }
           }
         });
         
-        // Extract text using the .text property as per guidelines
         if (response && response.text) {
           aiReview = response.text.trim();
         }
-      } catch (e) {
-        console.warn("AI Intelligence Vetting Error:", e);
-        aiReview = "Automated vetting process interrupted. Manual review prioritized.";
       }
+    } catch (e) {
+      console.warn("AI Analysis bypassed:", e);
     }
 
     const payload = {
       ...submission,
-      status: 'pending',
+      status: 'pending' as const,
       aiReview,
-      createdAt: new Date().toISOString()
+      createdAt: Timestamp.now()
     };
 
-    try {
-      const { data, error } = await supabase
-        .from('submissions')
-        .insert([payload])
-        .select();
+    if (!db) {
+      throw new Error("Database not connected. Application could not be saved.");
+    }
 
-      if (error) throw error;
-      if (!data || data.length === 0) throw new Error("No data returned from database");
-      
-      return data[0] as Submission;
+    try {
+      const docRef = await addDoc(collection(db, 'submissions'), payload);
+      return {
+        id: docRef.id,
+        ...payload,
+        createdAt: payload.createdAt.toDate().toISOString()
+      } as Submission;
     } catch (e) {
-      console.error("Critical: Database write failed:", e);
+      console.error("Firestore Write Error:", e);
       throw e;
     }
   },
 
   /**
-   * Update the status of a specific application (Approve/Decline).
+   * Update the status of a specific application in Firestore.
    */
   async updateStatus(id: string, status: Submission['status']): Promise<void> {
     try {
-      const { error } = await supabase
-        .from('submissions')
-        .update({ status })
-        .eq('id', id);
-
-      if (error) throw error;
+      if (!db) return;
+      const docRef = doc(db, 'submissions', id);
+      await updateDoc(docRef, { status });
     } catch (e) {
-      console.error("Failed to update submission status:", e);
+      console.error("Firestore Status Update Failed:", e);
     }
   },
 
   /**
-   * Generate a strategic report based on the current data in Supabase.
+   * Generate a strategic report based on Firestore data using Gemini.
    */
   async getGlobalPulse(): Promise<string> {
     const submissions = await this.getSubmissions();
-    if (submissions.length === 0) return "No data present in the cloud vault for analysis.";
+    if (submissions.length === 0) return "Global cloud vault is currently empty. No data for pulse analysis.";
 
+    // Fix: Use process.env.API_KEY directly for initialization.
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     try {
       const summaryText = submissions
-        .slice(0, 20)
-        .map(s => `${s.tier}: ₦${s.amount} (${s.status})`)
+        .slice(0, 10)
+        .map(s => `${s.type === 'funding' ? 'REQ' : 'PARTNER'}: ₦${s.amount}`)
         .join(', ');
 
-      // Use gemini-3-pro-preview for complex data analysis tasks
+      // Fix: Call generateContent and access the .text property directly.
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-preview',
-        contents: `Vidavest Dataset Analysis: [${summaryText}]. 
-        Provide a 3-sentence high-level executive summary on market demand and funding distribution trends.`,
+        contents: `Vidavest Pipeline: [${summaryText}]. Summarize market traction in 2 sentences.`,
         config: {
-          systemInstruction: "You are the Vidavest Chief Analytics Officer. Focus on growth metrics and operational scalability."
+          systemInstruction: "You are the Vidavest Chief Strategy Officer.",
+          thinkingConfig: { thinkingBudget: 1024 }
         }
       });
-      // Correctly accessing the text property from the response
-      return response.text || "Cloud data synthesis complete. Awaiting board review.";
+      return response.text || "Strategy synthesis complete.";
     } catch (e) {
-      console.error("Strategic analysis failed:", e);
-      return "Global Pulse analytics are temporarily offline. Monitoring system state.";
+      return "Global Pulse analytics node is currently syncing.";
     }
   }
 };

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -23,7 +24,11 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const handleHash = () => {
-      if (window.location.hash === '#admin-vault') setCurrentPage(Page.Admin);
+      if (window.location.hash === '#admin-vault') {
+        setCurrentPage(Page.Admin);
+      } else if (window.location.hash === '#home') {
+        setCurrentPage(Page.Home);
+      }
     };
     window.addEventListener('hashchange', handleHash);
     handleHash();
@@ -82,7 +87,7 @@ const App: React.FC = () => {
       case Page.Programs: return <ErrorBoundary><div className="animate-page-enter pt-20"><Programs /></div></ErrorBoundary>;
       case Page.Donate: return <ErrorBoundary><div className="animate-page-enter pt-20"><Donate /></div></ErrorBoundary>;
       case Page.Contact: return <ErrorBoundary><div className="animate-page-enter pt-20"><Contact /></div></ErrorBoundary>;
-      case Page.Admin: return <ErrorBoundary><Admin /></ErrorBoundary>;
+      case Page.Admin: return <ErrorBoundary><Admin onNavigate={setCurrentPage} /></ErrorBoundary>;
       case Page.Privacy: return <div className="animate-page-enter pt-20"><PrivacyPolicy /></div>;
       case Page.Terms: return <div className="animate-page-enter pt-20"><TermsOfService /></div>;
       case Page.Cookies: return <div className="animate-page-enter pt-20"><CookiePolicy /></div>;
@@ -93,7 +98,7 @@ const App: React.FC = () => {
   return (
     <ErrorBoundary fallback={<div className="min-h-screen bg-[#0B0B0F] flex flex-col items-center justify-center p-10 text-center">
       <h1 className="text-4xl font-black brand-gradient-text mb-4">PLATFORM RECOVERY</h1>
-      <p className="text-gray-500 mb-8 max-w-md">Our global strategy team has been notified of a critical rendering error. Please refresh the page.</p>
+      <p className="text-gray-500 mb-8 max-w-md">Our global strategy team has been notified of a rendering error. Please refresh the page.</p>
       <button onClick={() => window.location.reload()} className="brand-gradient-bg text-black px-12 py-4 rounded-2xl font-black">RESET PLATFORM</button>
     </div>}>
       <div className="min-h-screen flex flex-col bg-[#0B0B0F]">
@@ -103,13 +108,13 @@ const App: React.FC = () => {
           {renderPage()}
         </main>
 
-        {(currentPage === Page.Home || currentPage === Page.Admin) && (
+        {currentPage !== Page.Admin && (
           <section className="py-32 px-6">
              <div className="max-w-[1200px] mx-auto brand-gradient-bg rounded-[3rem] p-16 md:p-24 text-center text-black relative overflow-hidden group shadow-2xl">
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/10 rounded-full -mr-48 -mt-48 blur-3xl"></div>
                 <div className="relative z-10 max-w-3xl mx-auto">
                   <h2 className="text-4xl md:text-7xl font-black mb-10 leading-[0.9] tracking-tighter">
-                    {currentPage === Page.Admin ? 'Management of Assets' : 'Ready to ignite your global future?'}
+                    Ready to ignite your global future?
                   </h2>
                   <div className="flex flex-col sm:flex-row justify-center gap-4">
                     <button 
