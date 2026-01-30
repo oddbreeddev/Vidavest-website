@@ -1,3 +1,4 @@
+
 import { initializeApp, getApp, getApps, FirebaseApp } from "firebase/app";
 import { 
   getFirestore, 
@@ -69,22 +70,17 @@ export const apiService = {
   },
 
   /**
-   * Save a new application.
+   * Save a new application (No AI logic).
    */
   async saveSubmission(submission: Omit<Submission, 'id' | 'createdAt' | 'status'>): Promise<Submission> {
-    const aiReview = submission.type === 'funding' 
-      ? "Application logged. Awaiting manual review by the strategy team." 
-      : "Partnership interest recorded. Our partnership manager will reach out shortly.";
-
     const payload = {
       ...submission,
       status: 'pending' as const,
-      aiReview,
       createdAt: Timestamp.now()
     };
 
     if (!db) {
-      throw new Error("Local Vault Offline. Request cannot be processed.");
+      throw new Error("Local Vault Offline.");
     }
 
     try {
@@ -111,18 +107,5 @@ export const apiService = {
     } catch (e) {
       console.error("Status synchronization failure.");
     }
-  },
-
-  /**
-   * High-level market pulse analysis (Simplified).
-   */
-  async getGlobalPulse(): Promise<string> {
-    const submissions = await this.getSubmissions();
-    if (submissions.length === 0) return "Global baseline stable. Awaiting initial intake.";
-    
-    const count = submissions.length;
-    const pendingCount = submissions.filter(s => s.status === 'pending').length;
-    
-    return `Pipeline active with ${count} total entries. ${pendingCount} are currently awaiting executive review. Market focus remains on high-potential youth founders.`;
   }
 };
