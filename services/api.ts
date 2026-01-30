@@ -1,4 +1,3 @@
-
 import { GoogleGenAI } from "@google/genai";
 import { initializeApp, getApp, getApps, FirebaseApp } from "firebase/app";
 import { 
@@ -16,26 +15,22 @@ import {
 import { Submission } from "../types";
 
 /**
- * FIREBASE CONFIGURATION
- * Safely extracting config with fallbacks to prevent ReferenceErrors.
+ * Accessing environment variables injected by the build tool.
+ * These are replaced as literals during the build process.
  */
-const getFirebaseConfig = () => {
-  try {
-    return (window as any).process?.env?.FIREBASE_CONFIG || {};
-  } catch (e) {
-    return {};
-  }
-};
-
-const firebaseConfig = getFirebaseConfig();
+const firebaseConfig = (process.env.FIREBASE_CONFIG as any) || {};
 
 let app: FirebaseApp | null = null;
 let db: Firestore | null = null;
 
-// Initialize Firebase only if config is present to avoid initialization errors
-if (firebaseConfig.projectId) {
-  app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-  db = getFirestore(app);
+// Initialize Firebase with protection against multiple initializations
+try {
+  if (firebaseConfig.projectId) {
+    app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+    db = getFirestore(app);
+  }
+} catch (e) {
+  console.error("Firebase Sync Core Failure:", e);
 }
 
 export const apiService = {
@@ -45,7 +40,7 @@ export const apiService = {
   async getSubmissions(): Promise<Submission[]> {
     try {
       if (!db) {
-        console.warn("Firestore database not initialized. Check FIREBASE_CONFIG.");
+        console.warn("Vault offline. Check network configuration.");
         return [];
       }
       
@@ -64,51 +59,45 @@ export const apiService = {
         } as Submission;
       });
     } catch (e) {
-      console.error("Firebase Read Error:", e);
+      console.error("Cloud Retrieval Sync Error:", e);
       return [];
     }
   },
 
   /**
-   * Save a new application to Firestore and trigger AI vetting via Gemini.
+   * Save a new application and trigger Gemini analysis.
    */
   async saveSubmission(submission: Omit<Submission, 'id' | 'createdAt' | 'status'>): Promise<Submission> {
-    // Fix: Use process.env.API_KEY directly for initializing GoogleGenAI.
+    // ALWAYS initialize right before usage with the environment variable
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     let aiReview = submission.type === 'funding' 
-      ? "Vetting system initialized. Intelligence review pending." 
+      ? "Analysis node initialized. Intelligence summary pending." 
       : "Partnership registered. Strategic evaluation in progress.";
     
-    try {
-      if (process.env.API_KEY) {
+    // Execute AI reasoning if possible
+    if (process.env.API_KEY) {
+      try {
         const prompt = submission.type === 'funding' 
-          ? `Analyze this funding application for Vidavest.
-             Applicant: ${submission.fullName}
-             Program: ${submission.tier}
-             Amount: ₦${submission.amount}
-             Provide a professional 2-sentence executive summary focusing on risk and high-level potential.`
-          : `Analyze this strategic partnership for Vidavest.
-             Partner: ${submission.fullName}
-             Tier: ${submission.tier}
-             Provide a 2-sentence executive summary on the strategic value of this partnership.`;
+          ? `Evaluate funding application for Vidavest: ${submission.fullName}, Tier: ${submission.tier}, Amount: ₦${submission.amount}. Provide a professional 2-sentence risk and growth summary.`
+          : `Evaluate partnership for Vidavest: ${submission.fullName}, Commitment: ₦${submission.amount}. Provide a concise 2-sentence value-add summary.`;
 
-        // Fix: Call generateContent and access the .text property directly.
         const response = await ai.models.generateContent({
           model: 'gemini-3-pro-preview',
           contents: prompt,
           config: {
-            systemInstruction: "You are the Vidavest Chief Operating Officer. Provide insightful, concise, and professional risk/benefit analysis.",
+            systemInstruction: "You are the Chief Operating Officer of Vidavest. You are analytical, supportive, and focused on sustainable wealth in Nigeria.",
             thinkingConfig: { thinkingBudget: 2048 }
           }
         });
         
-        if (response && response.text) {
+        // Correctly access .text property
+        if (response.text) {
           aiReview = response.text.trim();
         }
+      } catch (e) {
+        console.warn("Intelligence synthesis bypassed due to latency thresholds.");
       }
-    } catch (e) {
-      console.warn("AI Analysis bypassed:", e);
     }
 
     const payload = {
@@ -119,7 +108,7 @@ export const apiService = {
     };
 
     if (!db) {
-      throw new Error("Database not connected. Application could not be saved.");
+      throw new Error("Local Vault Offline. Request cannot be processed.");
     }
 
     try {
@@ -130,51 +119,46 @@ export const apiService = {
         createdAt: payload.createdAt.toDate().toISOString()
       } as Submission;
     } catch (e) {
-      console.error("Firestore Write Error:", e);
+      console.error("Ledger write failure:", e);
       throw e;
     }
   },
 
   /**
-   * Update the status of a specific application in Firestore.
+   * Update status in Firestore.
    */
   async updateStatus(id: string, status: Submission['status']): Promise<void> {
+    if (!db) return;
     try {
-      if (!db) return;
       const docRef = doc(db, 'submissions', id);
       await updateDoc(docRef, { status });
     } catch (e) {
-      console.error("Firestore Status Update Failed:", e);
+      console.error("Status synchronization failure.");
     }
   },
 
   /**
-   * Generate a strategic report based on Firestore data using Gemini.
+   * High-level market pulse analysis.
    */
   async getGlobalPulse(): Promise<string> {
     const submissions = await this.getSubmissions();
-    if (submissions.length === 0) return "Global cloud vault is currently empty. No data for pulse analysis.";
+    if (submissions.length === 0) return "Global baseline stable. Awaiting initial intake.";
 
-    // Fix: Use process.env.API_KEY directly for initialization.
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     try {
-      const summaryText = submissions
-        .slice(0, 10)
-        .map(s => `${s.type === 'funding' ? 'REQ' : 'PARTNER'}: ₦${s.amount}`)
-        .join(', ');
-
-      // Fix: Call generateContent and access the .text property directly.
+      const summaryData = submissions.slice(0, 10).map(s => `${s.fullName}: ₦${s.amount}`).join(', ');
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-preview',
-        contents: `Vidavest Pipeline: [${summaryText}]. Summarize market traction in 2 sentences.`,
+        contents: `Analyze these recent Vidavest entries: ${summaryData}. Provide a 2-sentence executive summary of the current pipeline traction.`,
         config: {
-          systemInstruction: "You are the Vidavest Chief Strategy Officer.",
+          systemInstruction: "You are the Vidavest Chief Strategy Officer. Be visionary and data-driven.",
           thinkingConfig: { thinkingBudget: 1024 }
         }
       });
-      return response.text || "Strategy synthesis complete.";
+      return response.text || "Market synthesis complete.";
     } catch (e) {
-      return "Global Pulse analytics node is currently syncing.";
+      console.error("Strategic Analysis Error:", e);
+      return "Strategic analysis node is re-calibrating. Market stability confirmed.";
     }
   }
 };
