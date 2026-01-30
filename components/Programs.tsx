@@ -57,7 +57,7 @@ const Programs: React.FC = () => {
       });
 
       setSubmitted(true);
-      setNotification({ message: "Application submitted and vetted by our global AI systems!", type: 'success' });
+      setNotification({ message: "Application submitted for executive review!", type: 'success' });
       setTimeout(() => {
         setSubmitted(false);
         setSelectedProgram("");
@@ -150,13 +150,13 @@ const Programs: React.FC = () => {
                    You are applying for the <span className="text-white font-bold">{selectedProgram}</span>. 
                  </p>
                  <div className="space-y-8">
-                    {['Digital Submission', 'AI Integrity Vetting', 'Virtual Pitch', 'Disbursement'].map((step, i) => (
+                    {['Digital Submission', 'Portfolio Vetting', 'Executive Review', 'Disbursement'].map((step, i) => (
                       <div key={i} className="flex gap-6 group">
                         <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-xs font-black text-gold group-hover:brand-gradient-bg group-hover:text-black transition-all">0{i+1}</div>
                         <div>
                           <h5 className="text-sm font-black text-white uppercase tracking-wider mb-1">{step}</h5>
                           <p className="text-xs text-gray-500 font-medium leading-relaxed italic">
-                            {i === 1 ? 'Automated analysis powered by Gemini.' : 'Verified process by our global partners.'}
+                            {i === 1 ? 'Detailed analysis by our strategy team.' : 'Verified process by our global partners.'}
                           </p>
                         </div>
                       </div>
@@ -169,7 +169,7 @@ const Programs: React.FC = () => {
                    {loading && (
                      <div className="absolute inset-0 z-50 bg-black/60 flex flex-col items-center justify-center backdrop-blur-sm animate-page-enter">
                         <div className="w-16 h-16 border-4 border-gold border-t-transparent rounded-full animate-spin mb-6"></div>
-                        <p className="text-gold font-black uppercase tracking-[0.3em] text-[10px]">AI Integrity Vetting in progress...</p>
+                        <p className="text-gold font-black uppercase tracking-[0.3em] text-[10px]">Processing application...</p>
                      </div>
                    )}
 
@@ -177,7 +177,7 @@ const Programs: React.FC = () => {
                      <div className="text-center py-24 animate-page-enter">
                         <div className="text-7xl mb-10">📬</div>
                         <h4 className="text-4xl font-black mb-6 tracking-tighter">Request Received.</h4>
-                        <p className="text-gray-400 font-medium max-w-sm mx-auto leading-relaxed">Your application has been logged and the AI-initial review is ready for the strategy team.</p>
+                        <p className="text-gray-400 font-medium max-w-sm mx-auto leading-relaxed">Your application has been logged and the initial review is ready for the strategy team.</p>
                      </div>
                    ) : (
                      <form onSubmit={handleSubmit} className="space-y-8 relative z-10">

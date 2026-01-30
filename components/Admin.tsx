@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { apiService } from '../services/api';
 import { Submission, Page } from '../types';
@@ -45,7 +44,6 @@ const Admin: React.FC<AdminProps> = ({ onNavigate }) => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Default authentication requested by user
     if (adminId === "admin@vidavest" && password === "pass@admin.vidavest") {
       setIsAuthenticated(true);
     } else {
@@ -126,7 +124,7 @@ const Admin: React.FC<AdminProps> = ({ onNavigate }) => {
               <span className="text-gold text-[10px] font-black uppercase tracking-[0.5em] block">Executive Operations Live</span>
             </div>
             <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase">Command <span className="brand-gradient-text">Center.</span></h1>
-            <p className="text-gray-500 font-bold text-xs uppercase tracking-[0.2em] mt-3">Pipeline Oversight • High-Impact Decision Engine</p>
+            <p className="text-gray-500 font-bold text-xs uppercase tracking-[0.2em] mt-3">Pipeline Oversight • Executive Decision Engine</p>
           </div>
           <div className="flex gap-6 items-center">
              <div className="p-8 bg-[#14141C] border border-white/5 rounded-[2.5rem] min-w-[160px] text-center hidden sm:block">
@@ -149,8 +147,8 @@ const Admin: React.FC<AdminProps> = ({ onNavigate }) => {
               <div className="flex items-center gap-5">
                 <div className="w-14 h-14 rounded-2xl brand-gradient-bg flex items-center justify-center text-3xl shadow-lg">📈</div>
                 <div>
-                  <h2 className="text-2xl font-black text-white uppercase tracking-tight">Strategy Node</h2>
-                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">AI Market Synthesis • Gemini 3 Pro</p>
+                  <h2 className="text-2xl font-black text-white uppercase tracking-tight">Pipeline Synthesis</h2>
+                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Strategic Overview • Operations Engine</p>
                 </div>
               </div>
               <button 
@@ -158,7 +156,7 @@ const Admin: React.FC<AdminProps> = ({ onNavigate }) => {
                 disabled={analyzingPulse}
                 className={`text-[10px] font-black text-gold hover:text-white transition uppercase tracking-widest px-6 py-2.5 border border-gold/20 rounded-full bg-gold/5 ${analyzingPulse ? 'opacity-50 animate-pulse' : ''}`}
               >
-                {analyzingPulse ? 'Analyzing Pipeline...' : 'Request Synthesis'}
+                {analyzingPulse ? 'Processing Pulse...' : 'Refresh Insights'}
               </button>
             </div>
             <div className="bg-black/40 p-10 rounded-[2.5rem] border border-white/5 min-h-[120px] flex items-center shadow-inner">
@@ -207,9 +205,9 @@ const Admin: React.FC<AdminProps> = ({ onNavigate }) => {
 
                 <div className="lg:w-2/4 w-full bg-black/40 p-10 rounded-[3rem] border border-white/5 relative shadow-inner group-hover:bg-black/50 transition-colors">
                   <p className="text-[10px] font-black text-gold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
-                    <span className="w-2 h-2 rounded-full bg-gold animate-pulse"></span> Executive Vetting Report
+                    <span className="w-2 h-2 rounded-full bg-gold"></span> Executive Review Notes
                   </p>
-                  <p className="text-base text-gray-400 leading-relaxed font-semibold italic">"{item.aiReview || 'Intelligence synthesis in progress. Please wait.'}"</p>
+                  <p className="text-base text-gray-400 leading-relaxed font-semibold italic">"{item.aiReview || 'Review pending. Portfolio team will update shortly.'}"</p>
                   
                   <div className="mt-8 pt-8 border-t border-white/5 flex flex-wrap gap-12">
                      <div>

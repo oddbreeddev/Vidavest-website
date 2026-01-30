@@ -1,4 +1,3 @@
-import { GoogleGenAI } from "@google/genai";
 import { initializeApp, getApp, getApps, FirebaseApp } from "firebase/app";
 import { 
   getFirestore, 
@@ -16,14 +15,22 @@ import { Submission } from "../types";
 
 /**
  * Accessing environment variables injected by the build tool.
- * These are replaced as literals during the build process.
  */
-const firebaseConfig = (process.env.FIREBASE_CONFIG as any) || {};
+const getSafeEnv = () => {
+  try {
+    return (process.env as any) || {};
+  } catch (e) {
+    return {};
+  }
+};
+
+const env = getSafeEnv();
+const firebaseConfig = env.FIREBASE_CONFIG || {};
 
 let app: FirebaseApp | null = null;
 let db: Firestore | null = null;
 
-// Initialize Firebase with protection against multiple initializations
+// Initialize Firebase
 try {
   if (firebaseConfig.projectId) {
     app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
@@ -39,10 +46,7 @@ export const apiService = {
    */
   async getSubmissions(): Promise<Submission[]> {
     try {
-      if (!db) {
-        console.warn("Vault offline. Check network configuration.");
-        return [];
-      }
+      if (!db) return [];
       
       const submissionsCol = collection(db, 'submissions');
       const q = query(submissionsCol, orderBy('createdAt', 'desc'));
@@ -65,40 +69,12 @@ export const apiService = {
   },
 
   /**
-   * Save a new application and trigger Gemini analysis.
+   * Save a new application.
    */
   async saveSubmission(submission: Omit<Submission, 'id' | 'createdAt' | 'status'>): Promise<Submission> {
-    // ALWAYS initialize right before usage with the environment variable
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-    
-    let aiReview = submission.type === 'funding' 
-      ? "Analysis node initialized. Intelligence summary pending." 
-      : "Partnership registered. Strategic evaluation in progress.";
-    
-    // Execute AI reasoning if possible
-    if (process.env.API_KEY) {
-      try {
-        const prompt = submission.type === 'funding' 
-          ? `Evaluate funding application for Vidavest: ${submission.fullName}, Tier: ${submission.tier}, Amount: ₦${submission.amount}. Provide a professional 2-sentence risk and growth summary.`
-          : `Evaluate partnership for Vidavest: ${submission.fullName}, Commitment: ₦${submission.amount}. Provide a concise 2-sentence value-add summary.`;
-
-        const response = await ai.models.generateContent({
-          model: 'gemini-3-pro-preview',
-          contents: prompt,
-          config: {
-            systemInstruction: "You are the Chief Operating Officer of Vidavest. You are analytical, supportive, and focused on sustainable wealth in Nigeria.",
-            thinkingConfig: { thinkingBudget: 2048 }
-          }
-        });
-        
-        // Correctly access .text property
-        if (response.text) {
-          aiReview = response.text.trim();
-        }
-      } catch (e) {
-        console.warn("Intelligence synthesis bypassed due to latency thresholds.");
-      }
-    }
+    const aiReview = submission.type === 'funding' 
+      ? "Application logged. Awaiting manual review by the strategy team." 
+      : "Partnership interest recorded. Our partnership manager will reach out shortly.";
 
     const payload = {
       ...submission,
@@ -138,27 +114,15 @@ export const apiService = {
   },
 
   /**
-   * High-level market pulse analysis.
+   * High-level market pulse analysis (Simplified).
    */
   async getGlobalPulse(): Promise<string> {
     const submissions = await this.getSubmissions();
     if (submissions.length === 0) return "Global baseline stable. Awaiting initial intake.";
-
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-    try {
-      const summaryData = submissions.slice(0, 10).map(s => `${s.fullName}: ₦${s.amount}`).join(', ');
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-pro-preview',
-        contents: `Analyze these recent Vidavest entries: ${summaryData}. Provide a 2-sentence executive summary of the current pipeline traction.`,
-        config: {
-          systemInstruction: "You are the Vidavest Chief Strategy Officer. Be visionary and data-driven.",
-          thinkingConfig: { thinkingBudget: 1024 }
-        }
-      });
-      return response.text || "Market synthesis complete.";
-    } catch (e) {
-      console.error("Strategic Analysis Error:", e);
-      return "Strategic analysis node is re-calibrating. Market stability confirmed.";
-    }
+    
+    const count = submissions.length;
+    const pendingCount = submissions.filter(s => s.status === 'pending').length;
+    
+    return `Pipeline active with ${count} total entries. ${pendingCount} are currently awaiting executive review. Market focus remains on high-potential youth founders.`;
   }
 };
