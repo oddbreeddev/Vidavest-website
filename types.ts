@@ -22,13 +22,13 @@ export enum Page {
 
 export interface Submission {
   id: string;
-  type: 'funding' | 'partnership';
+  type: 'funding' | 'partnership' | 'newsletter';
   tier?: string;
-  fullName: string;
+  fullName?: string;
   email: string;
-  phone: string;
+  phone?: string;
   amount?: string;
-  status: 'pending' | 'reviewing' | 'approved' | 'declined';
+  status?: 'pending' | 'reviewing' | 'approved' | 'declined';
   createdAt: string;
   aiReview?: string;
 }
